@@ -1,0 +1,163 @@
+"""Generates level3.json. Run: python gen_level3.py"""
+import json
+from pathlib import Path
+
+L = []
+
+
+def lesson(**kw):
+    kw.setdefault("minutes", 6)
+    kw.setdefault("xp", 15)
+    L.append(kw)
+
+
+def cases(*exprs):
+    out = []
+    for i, e in enumerate(exprs):
+        c = {"expr": e}
+        if i:
+            c["visible"] = False
+        out.append(c)
+    return out
+
+
+lesson(
+    title="Strings (indexing, slicing, methods)",
+    concept="A string is text, and every character has a position (an <b>index</b>) starting at <code>0</code>; negative indexes count from the end, so <code>word[-1]</code> is the last letter. "
+            "<b>Slicing</b> takes a piece: <code>word[0:3]</code> gives the first three characters. Methods like <code>.upper()</code>, <code>.lower()</code> and <code>.strip()</code> return new text.",
+    why="Usernames, emails, messages and file names are all strings that programs cut up and clean.",
+    example="name = 'Chennai'\nprint(name[0], name[-1])\nprint(name[0:3])\nprint(name.upper())",
+    example_note="Prints the first and last letters, the first three letters and the uppercase name.",
+    prompt="Write a function <code>short_code(name)</code> that returns the first 3 letters of <code>name</code> in uppercase, followed by the length of the name. Example: <code>short_code('Chennai')</code> returns <code>'CHE7'</code>.",
+    starter="def short_code(name):\n    # use slicing, .upper() and len()\n    pass\n",
+    solution="def short_code(name):\n    return name[:3].upper() + str(len(name))",
+    hints=["name[:3] gives the first three characters.", "Join text and a number with str(len(name)).", "return name[:3].upper() + str(len(name))"],
+    tests={"cases": cases("short_code('Chennai')", "short_code('Asha')", "short_code('Jo')"), "requires": ["upper", "len", "["]},
+)
+lesson(
+    title="Lists",
+    concept="A <b>list</b> stores many values in order, inside square brackets: <code>marks = [80, 65, 90]</code>. Use indexes like strings (<code>marks[0]</code>, <code>marks[-1]</code>), <code>len(marks)</code> for the size, and you can change an item with <code>marks[1] = 70</code>.",
+    why="Carts, student lists and search results are all lists.",
+    example="marks = [80, 65, 90]\nprint(marks[0], marks[-1])\nmarks[1] = 70\nprint(marks, len(marks))",
+    example_note="Reads the first and last item, changes the middle one and shows the list and its length.",
+    prompt="Write a function <code>first_last(items)</code> that returns a new list holding the first and the last item of <code>items</code>. Example: <code>first_last(['a', 'b', 'c'])</code> returns <code>['a', 'c']</code>.",
+    starter="def first_last(items):\n    # return [first, last]\n    pass\n",
+    solution="def first_last(items):\n    return [items[0], items[-1]]",
+    hints=["The first item is items[0].", "The last item is items[-1].", "return [items[0], items[-1]]"],
+    tests={"cases": cases("first_last(['a', 'b', 'c'])", "first_last([10, 20, 30, 40])", "first_last(['x'])"), "requires": ["[0]", "[-1]"]},
+)
+lesson(
+    title="List Methods (append, extend, insert, pop, remove)",
+    concept="<code>append(x)</code> adds one item at the end, <code>extend(list)</code> adds many, <code>insert(i, x)</code> adds at position <code>i</code>, <code>pop()</code> removes (and returns) the last item, and <code>remove(x)</code> deletes the first item equal to <code>x</code>.",
+    why="A shopping cart grows and shrinks all the time as people add and remove products.",
+    example="cart = ['rice']\ncart.append('milk')\ncart.extend(['eggs', 'tea'])\ncart.insert(0, 'oil')\ncart.pop()\ncart.remove('rice')\nprint(cart)",
+    example_note="Builds and trims a cart; prints ['oil', 'milk', 'eggs'].",
+    prompt="Write <code>edit_cart(first)</code>. Start with <code>cart = [first, 'sugar', 'oil']</code>, then in this order: <code>append</code> <code>'milk'</code>, <code>extend</code> with <code>['eggs', 'tea']</code>, <code>insert</code> <code>'salt'</code> at position 1, <code>pop</code> the last item, and <code>remove</code> <code>'sugar'</code>. Return the cart.",
+    starter="def edit_cart(first):\n    cart = [first, 'sugar', 'oil']\n    # append, extend, insert, pop, remove\n    return cart\n",
+    solution="def edit_cart(first):\n    cart = [first, 'sugar', 'oil']\n    cart.append('milk')\n    cart.extend(['eggs', 'tea'])\n    cart.insert(1, 'salt')\n    cart.pop()\n    cart.remove('sugar')\n    return cart",
+    hints=["Each method is called on the list: cart.append('milk').", "extend takes a list: cart.extend(['eggs', 'tea']).", "Order: append, extend, insert(1, 'salt'), pop(), remove('sugar')."],
+    tests={"cases": cases("edit_cart('rice')", "edit_cart('bread')", "edit_cart('soap')"), "requires": ["append", "extend", "insert", "pop", "remove"]},
+)
+lesson(
+    title="Tuples",
+    concept="A <b>tuple</b> is like a list but <b>cannot be changed</b> after it is created. It is written with round brackets: <code>point = (3, 4)</code>. Indexing and <code>len()</code> work as with lists, and a function can return several values as a tuple.",
+    why="Fixed groups such as coordinates, RGB colours or a (min, max) pair are perfect tuples.",
+    example="point = (3, 4)\nprint(point[0], point[1])\nprint(len(point))",
+    example_note="Reads the two values of a tuple and its length.",
+    prompt="Write a function <code>min_max(marks)</code> that takes a list or tuple of numbers and returns a <b>tuple</b> <code>(lowest, highest)</code>. Example: <code>min_max([40, 90, 65])</code> returns <code>(40, 90)</code>.",
+    starter="def min_max(marks):\n    # return a tuple (lowest, highest)\n    pass\n",
+    solution="def min_max(marks):\n    return (min(marks), max(marks))",
+    hints=["Python has built-in min() and max().", "Return two values separated by a comma.", "return (min(marks), max(marks))"],
+    tests={"cases": cases("min_max([40, 90, 65])", "min_max((7,))", "min_max([5, -2, 8, 8])"), "requires": ["min", "max"]},
+)
+lesson(
+    title="Sets",
+    concept="A <b>set</b> is an unordered collection of <b>unique</b> items, written with curly brackets: <code>{1, 2, 3}</code>. Duplicates vanish automatically. Make one from a list with <code>set(items)</code>; <code>in</code> checks are very fast.",
+    why="Removing duplicate email addresses or counting distinct visitors is a job for sets.",
+    example="names = ['Asha', 'Ravi', 'Asha', 'Mei']\nunique = set(names)\nprint(len(unique))\nprint('Ravi' in unique)",
+    example_note="Three unique names remain out of four, and Ravi is in the set.",
+    prompt="Write <code>unique_visitors(names)</code> that removes duplicates using a <code>set</code> and returns the unique names as a <b>sorted list</b>. Example: <code>unique_visitors(['b', 'a', 'b'])</code> returns <code>['a', 'b']</code>.",
+    starter="def unique_visitors(names):\n    # convert to a set, then return sorted(...)\n    pass\n",
+    solution="def unique_visitors(names):\n    return sorted(set(names))",
+    hints=["set(names) removes the duplicates.", "Sets have no order, so use sorted() to get a list.", "return sorted(set(names))"],
+    tests={"cases": cases("unique_visitors(['b', 'a', 'b'])", "unique_visitors(['Ravi', 'Asha', 'Ravi', 'Mei', 'Asha'])", "unique_visitors([])"), "requires": ["set("]},
+)
+lesson(
+    title="Dictionaries",
+    concept="A <b>dictionary</b> stores <b>key: value</b> pairs in curly brackets: <code>student = {'name': 'Asha', 'age': 20}</code>. Look up a value with its key, <code>student['name']</code>, and add or change one with <code>student['city'] = 'Pune'</code>.",
+    why="Records such as a user profile, a product with its price or a student with marks are dictionaries.",
+    example="student = {'name': 'Asha', 'age': 20}\nstudent['city'] = 'Pune'\nprint(student['name'])\nprint(student)",
+    example_note="Reads one value, adds a new pair and prints the dictionary.",
+    prompt="Write <code>make_student(name, marks)</code> that returns a dictionary with the keys <code>'name'</code>, <code>'marks'</code> and <code>'passed'</code> (in that order); <code>passed</code> is <code>True</code> when <code>marks</code> is 40 or more.",
+    starter="def make_student(name, marks):\n    # return {'name': ..., 'marks': ..., 'passed': ...}\n    pass\n",
+    solution="def make_student(name, marks):\n    return {'name': name, 'marks': marks, 'passed': marks >= 40}",
+    hints=["Write the dictionary with curly brackets and key: value pairs.", "passed is the comparison marks >= 40.", "return {'name': name, 'marks': marks, 'passed': marks >= 40}"],
+    tests={"cases": cases("make_student('Asha', 72)", "make_student('Ravi', 40)", "make_student('Mei', 12)"), "requires": ["{", "passed"]},
+)
+lesson(
+    title="Dictionary Methods (keys, values, items, get, update)",
+    concept="<code>d.keys()</code> lists the keys, <code>d.values()</code> the values and <code>d.items()</code> the (key, value) pairs. <code>d.get(key, default)</code> looks up safely without an error if the key is missing, and <code>d.update({...})</code> adds or changes several pairs at once.",
+    why="Inventory systems, word counters and settings screens all lean on these methods.",
+    example="stock = {'pen': 3, 'book': 8}\nstock.update({'ink': 5})\nprint(list(stock.keys()))\nprint(sum(stock.values()))\nprint(stock.get('bag', 0))\nfor name, qty in stock.items():\n    print(name, qty)",
+    example_note="Updates the stock then reads keys, values, a safe lookup and the pairs.",
+    prompt="Write <code>summary(stock)</code>, where <code>stock</code> maps item names to quantities. First <code>update</code> it with <code>{'pen': 50}</code>. Then return a dictionary with these keys in order: <code>'names'</code> (sorted list of <code>keys()</code>), <code>'total'</code> (sum of <code>values()</code>), <code>'ink'</code> (<code>get</code> of <code>'ink'</code> with default <code>0</code>) and <code>'low'</code> (sorted list of item names whose quantity is below 5, found by looping over <code>items()</code>).",
+    starter="def summary(stock):\n    # stock.update({'pen': 50})\n    # low = [] ... loop over stock.items()\n    # return {'names': ..., 'total': ..., 'ink': ..., 'low': ...}\n    pass\n",
+    solution="def summary(stock):\n    stock.update({'pen': 50})\n    low = []\n    for name, qty in stock.items():\n        if qty < 5:\n            low.append(name)\n    return {'names': sorted(stock.keys()), 'total': sum(stock.values()), 'ink': stock.get('ink', 0), 'low': sorted(low)}",
+    hints=["Call stock.update({'pen': 50}) first.", "for name, qty in stock.items(): lets you check each quantity.", "Build low with append, then return the dictionary with sorted(stock.keys()), sum(stock.values()), stock.get('ink', 0), sorted(low)."],
+    tests={"cases": cases("summary({'book': 8, 'ink': 2})", "summary({'cap': 1, 'bag': 4, 'pen': 1})", "summary({})"), "requires": ["keys", "values", "items", "get", "update"]},
+    minutes=8,
+)
+lesson(
+    title="Nested Lists",
+    concept="A list can hold other lists. This makes a table: <code>table = [[80, 70], [60, 90]]</code>. <code>table[1]</code> is the second row and <code>table[1][0]</code> is the first number in that row. Loop over the rows to process each one.",
+    why="Marks sheets, game boards and spreadsheets are lists of rows.",
+    example="table = [[80, 70], [60, 90]]\nprint(table[1])\nprint(table[1][0])\nfor row in table:\n    print(sum(row))",
+    example_note="Reads a row, one cell, and the sum of each row.",
+    prompt="Each row of <code>table</code> holds one student's marks in several subjects. Write <code>row_totals(table)</code> that returns a list with the total of each row. Example: <code>row_totals([[80, 70], [60, 90]])</code> returns <code>[150, 150]</code>.",
+    starter="def row_totals(table):\n    totals = []\n    # loop over the rows, append the sum of each\n    return totals\n",
+    solution="def row_totals(table):\n    totals = []\n    for row in table:\n        totals.append(sum(row))\n    return totals",
+    hints=["Use for row in table:", "sum(row) adds up one row.", "totals.append(sum(row)) inside the loop."],
+    tests={"cases": cases("row_totals([[80, 70], [60, 90]])", "row_totals([[10, 20, 30]])", "row_totals([])"), "requires": ["for", "sum"]},
+)
+lesson(
+    title="Nested Dictionaries",
+    concept="A dictionary value can be another dictionary. Chain the keys to reach inside: <code>student['marks']['maths']</code>. This keeps related details grouped together.",
+    why="Data from websites and apps (JSON) is mostly dictionaries inside dictionaries.",
+    example="student = {'name': 'Asha', 'marks': {'maths': 90, 'science': 80}}\nprint(student['marks']['maths'])\nprint(sum(student['marks'].values()))",
+    example_note="Reads one inner value and the total of the inner dictionary.",
+    prompt="Write <code>total_marks(student)</code>. <code>student</code> looks like <code>{'name': 'Asha', 'marks': {'maths': 90, 'science': 80}}</code>. Return the sum of all the values in its <code>'marks'</code> dictionary.",
+    starter="def total_marks(student):\n    # student['marks'] is itself a dictionary\n    pass\n",
+    solution="def total_marks(student):\n    return sum(student['marks'].values())",
+    hints=["First reach the inner dictionary with student['marks'].", "Then use .values() on it.", "return sum(student['marks'].values())"],
+    tests={"cases": cases("total_marks({'name': 'Asha', 'marks': {'maths': 90, 'science': 80}})", "total_marks({'name': 'Ravi', 'marks': {'maths': 55}})", "total_marks({'name': 'Mei', 'marks': {}})"), "requires": ["marks", "values"]},
+)
+lesson(
+    title="Mutable vs Immutable",
+    concept="<b>Mutable</b> objects (lists, dictionaries, sets) can be changed in place. <b>Immutable</b> objects (numbers, strings, tuples) cannot. If you write <code>b = a</code> for a list, both names share one list, so a change through <code>b</code> also changes <code>a</code>. Use <code>a.copy()</code> to get an independent list.",
+    why="Many bugs come from changing a list that another part of the program is still using.",
+    example="a = [1, 2]\nb = a\nb.append(3)\nprint(a)\nc = a.copy()\nc.append(4)\nprint(a, c)",
+    example_note="a changes through b, but not through the copy c.",
+    prompt="Write <code>with_bonus(marks)</code> that returns a <b>new</b> list in which every mark is increased by 5, <b>without changing</b> the original list. Start with <code>result = marks.copy()</code>.",
+    starter="def with_bonus(marks):\n    result = marks.copy()\n    # add 5 to every item of result\n    return result\n",
+    solution="def with_bonus(marks):\n    result = marks.copy()\n    for i in range(len(result)):\n        result[i] += 5\n    return result",
+    hints=["Change result, never marks.", "result[i] += 5 updates one position; loop over range(len(result)).", "for i in range(len(result)): result[i] += 5"],
+    tests={"cases": cases("(lambda m: (with_bonus(m), m))([40, 50])", "(lambda m: (with_bonus(m), m))([])", "(lambda m: (with_bonus(m), m))([95, 100, 0])"), "requires": ["copy"]},
+)
+lesson(
+    title="Unpacking (list, tuple, dict)",
+    concept="<b>Unpacking</b> spreads a collection into separate names: <code>name, age = ('Asha', 20)</code> works for tuples and lists, and <code>first, *rest = [1, 2, 3]</code> gathers the leftovers. With <code>**</code> you unpack a dictionary's pairs into another dictionary: <code>{**a, **b}</code> merges them.",
+    why="It makes code shorter and clearer when functions return several values or when you merge settings and records.",
+    example="name, age = ('Asha', 20)\nfirst, *rest = [1, 2, 3]\ninfo = {'city': 'Pune'}\ncard = {'name': name, **info}\nprint(name, age, first, rest)\nprint(card)",
+    example_note="Unpacks a tuple and a list, then merges a dictionary into a new one.",
+    prompt="Write <code>make_card(person, contact)</code>. <code>person</code> is a tuple <code>(name, age)</code> and <code>contact</code> is a dictionary. Unpack the tuple into <code>name</code> and <code>age</code>, then return a dictionary with <code>'name'</code>, <code>'age'</code> followed by all the pairs of <code>contact</code> (unpack it with <code>**</code>).",
+    starter="def make_card(person, contact):\n    # name, age = person\n    # return {'name': ..., 'age': ..., **contact}\n    pass\n",
+    solution="def make_card(person, contact):\n    name, age = person\n    return {'name': name, 'age': age, **contact}",
+    hints=["name, age = person unpacks the tuple.", "Inside the new dictionary, **contact copies every pair of contact.", "return {'name': name, 'age': age, **contact}"],
+    tests={"cases": cases("make_card(('Asha', 20), {'city': 'Pune'})", "make_card(('Ravi', 31), {})", "make_card(('Mei', 18), {'city': 'Oslo', 'phone': '123'})"), "requires": ["**"]},
+)
+
+out = {"title": "Level 3 · Python Data Structures",
+       "blurb": "Store and organise data with strings, lists, tuples, sets and dictionaries.",
+       "lessons": L}
+Path(__file__).with_name("level3.json").write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
+print("wrote level3.json with", len(L), "lessons")

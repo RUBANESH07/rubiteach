@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 230 56" role="img" aria-label="Rubitech Academy">
+  <defs>
+    <linearGradient id="rt-bg" x1="3" y1="2" x2="51" y2="54" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4A1942"/>
+      <stop offset="1" stop-color="#8B3A62"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(0 4) scale(.75)">
+    <rect width="64" height="64" rx="18" fill="url(#rt-bg)"/>
+    <g transform="translate(-3 0)" fill="none" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M17 47V17H53" stroke="#FFF1ED"/><path d="M30 17a7 7 0 0 1 0 14H17" stroke="#FFF1ED"/>
+      <path d="M47 20V47" stroke="#FFF1ED"/><path d="M26 32L35 47" stroke="#FF8066"/>
+    </g>
+  </g>
+  <!-- Wordmark uses Inter (fallback: system sans). Convert text to outlines before sending to print. -->
+  <text x="62" y="30" font-family="Inter, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="27" font-weight="800" letter-spacing="-0.6" fill="#4A1942">Rubitech</text>
+  <text x="63" y="46" font-family="Inter, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" letter-spacing="4.2" fill="#8B3A62">ACADEMY</text>
+</svg>

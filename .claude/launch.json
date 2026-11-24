@@ -1,0 +1,7 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "site", "runtimeExecutable": "python", "runtimeArgs": ["serve.py"], "port": 5173 },
+    { "name": "api", "runtimeExecutable": "python", "runtimeArgs": ["-m", "uvicorn", "app.main:app", "--app-dir", "backend", "--port", "8000"], "port": 8000 }
+  ]
+}

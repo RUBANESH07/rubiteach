@@ -1,0 +1,790 @@
+{
+  "title": "Level 8 · Coding Logic and Problem Solving",
+  "blurb": "Classic interview-style problems: numbers, patterns, strings, searching, sorting and core data structures and techniques.",
+  "xp": 30,
+  "lessons": [
+    {
+      "title": "Number Programs",
+      "concept": "Many classic problems are about digits and divisors. A number is <b>prime</b> if only 1 and itself divide it evenly, so you test divisors with <code>%</code> (remainder). For 7, try 2, 3, 4, 5, 6: none give remainder 0, so 7 is prime. For 9, <code>9 % 3 == 0</code>, so it is not. Other classics: a <b>palindrome</b> number reads the same backwards (121) and an <b>Armstrong</b> number equals the sum of its digits each raised to the number of digits (153 = 1 + 125 + 27).",
+      "why": "Divisor checks and digit tricks appear in validation (check digits on cards), cryptography and every coding interview.",
+      "example": "n = 153\ndigits = str(n)\ntotal = sum(int(d) ** len(digits) for d in digits)\nprint(total == n)\nprint(str(121) == str(121)[::-1])",
+      "example_note": "Shows that 153 is an Armstrong number and 121 is a palindrome.",
+      "prompt": "Write a function <code>is_prime(n)</code> that returns <code>True</code> if <code>n</code> is prime and <code>False</code> otherwise. Remember 0 and 1 are not prime, 2 is.",
+      "starter": "def is_prime(n):\n    # numbers below 2 are not prime\n    # then try divisors from 2 up to n - 1 (or the square root)\n    pass\n",
+      "solution": "def is_prime(n):\n    if n < 2:\n        return False\n    for d in range(2, int(n ** 0.5) + 1):\n        if n % d == 0:\n            return False\n    return True\n",
+      "hints": [
+        "Return False straight away when n is less than 2.",
+        "Loop d over range(2, n) and check n % d == 0.",
+        "If any d divides n evenly, return False. If the loop ends, return True."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "is_prime(7)",
+            "visible": true
+          },
+          {
+            "expr": "is_prime(1)",
+            "visible": false
+          },
+          {
+            "expr": "is_prime(2)",
+            "visible": false
+          },
+          {
+            "expr": "is_prime(0)",
+            "visible": false
+          },
+          {
+            "expr": "is_prime(15)",
+            "visible": false
+          },
+          {
+            "expr": "is_prime(97)",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "def",
+          "%"
+        ]
+      },
+      "minutes": 9,
+      "xp": 30
+    },
+    {
+      "title": "Pattern Programs",
+      "concept": "Patterns are drawn with <b>nested loops</b>: the outer loop picks the row, the inner part decides what goes on that row. A star triangle of 3 rows prints <code>*</code>, then <code>**</code>, then <code>***</code>: row <code>i</code> has <code>i</code> stars, so <code>print('*' * i)</code> inside <code>for i in range(1, 4)</code> does it. Number patterns work the same way, only you build the row from numbers.",
+      "why": "Patterns train you to think about rows and columns, which is the heart of tables, grids, game boards and text reports.",
+      "example": "n = 3\nfor i in range(1, n + 1):\n    print('*' * i)",
+      "example_note": "Prints a 3-row star triangle.",
+      "prompt": "Read an integer <code>n</code> from input. Print a number triangle with <code>n</code> rows where row <code>i</code> shows the numbers <code>1</code> to <code>i</code> separated by spaces. For <code>3</code> it prints <code>1</code>, <code>1 2</code>, <code>1 2 3</code> on three lines.",
+      "starter": "n = int(input())\n# for each row i from 1 to n, print the numbers 1..i separated by spaces\n",
+      "solution": "n = int(input())\nfor i in range(1, n + 1):\n    print(' '.join(str(j) for j in range(1, i + 1)))\n",
+      "hints": [
+        "Use an outer loop for i in range(1, n + 1).",
+        "For each row, build the numbers 1..i. You can use a second loop or ' '.join(...) with str().",
+        "print(' '.join(str(j) for j in range(1, i + 1)))"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "stdin": "3\n",
+            "visible": true
+          },
+          {
+            "stdin": "1\n",
+            "visible": false
+          },
+          {
+            "stdin": "5\n",
+            "visible": false
+          },
+          {
+            "stdin": "2\n",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "for",
+          "input"
+        ]
+      },
+      "minutes": 9,
+      "xp": 30
+    },
+    {
+      "title": "String Problems",
+      "concept": "Strings can be sliced and looped over like lists. <code>text[::-1]</code> reverses a string, and a <b>palindrome</b> equals its own reverse. Two words are <b>anagrams</b> when they use exactly the same letters: 'listen' and 'silent' both sort to 'eilnst'. So to compare anagrams, clean both words (lowercase, no spaces) and compare their sorted letters.",
+      "why": "Text cleaning and comparison power search boxes, spell checkers, duplicate detection and word games.",
+      "example": "word = 'Level'\nclean = word.lower()\nprint(clean == clean[::-1])\nprint(sorted('listen') == sorted('silent'))",
+      "example_note": "Checks a palindrome and an anagram pair.",
+      "prompt": "Write <code>is_anagram(a, b)</code> that returns <code>True</code> when <code>a</code> and <code>b</code> are anagrams. Ignore upper/lower case and spaces.",
+      "starter": "def is_anagram(a, b):\n    # lowercase both and remove spaces\n    # compare their sorted letters\n    pass\n",
+      "solution": "def is_anagram(a, b):\n    a = a.lower().replace(' ', '')\n    b = b.lower().replace(' ', '')\n    return sorted(a) == sorted(b)\n",
+      "hints": [
+        "Use .lower() and .replace(' ', '') to clean each word.",
+        "sorted('abc') gives a list of its letters in order.",
+        "return sorted(a) == sorted(b) after cleaning both."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "is_anagram('listen', 'silent')",
+            "visible": true
+          },
+          {
+            "expr": "is_anagram('abc', 'abd')",
+            "visible": false
+          },
+          {
+            "expr": "is_anagram('', '')",
+            "visible": false
+          },
+          {
+            "expr": "is_anagram('Dormitory', 'dirty room')",
+            "visible": false
+          },
+          {
+            "expr": "is_anagram('aab', 'abb')",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "def",
+          "sorted"
+        ]
+      },
+      "minutes": 9,
+      "xp": 30
+    },
+    {
+      "title": "Array/List Problems",
+      "concept": "Most list problems are one pass: walk through the items and keep a few <b>tracking variables</b>. To find the largest, start with the first item as <code>best</code> and replace it whenever you meet something bigger. To find duplicates, remember what you have <code>seen</code>; if an item is already in <code>seen</code>, it is a duplicate.",
+      "why": "Finding highest scores, lowest prices and repeated entries is everyday data work.",
+      "example": "nums = [3, 8, 2, 8]\nbest = nums[0]\nfor x in nums:\n    if x > best:\n        best = x\nprint(best)",
+      "example_note": "Finds the largest number with a tracking variable.",
+      "prompt": "Write <code>list_stats(nums)</code> for a non-empty list. Return a tuple <code>(largest, smallest, duplicates)</code> where <code>duplicates</code> is a sorted list of the values that appear more than once (each listed once). Do not use <code>max()</code> or <code>min()</code>.",
+      "starter": "def list_stats(nums):\n    # track the largest and smallest while looping\n    # use a 'seen' collection to spot duplicates\n    pass\n",
+      "solution": "def list_stats(nums):\n    largest = nums[0]\n    smallest = nums[0]\n    seen = set()\n    dups = set()\n    for x in nums:\n        if x > largest:\n            largest = x\n        if x < smallest:\n            smallest = x\n        if x in seen:\n            dups.add(x)\n        seen.add(x)\n    return (largest, smallest, sorted(dups))\n",
+      "hints": [
+        "Start largest and smallest as nums[0].",
+        "Loop over nums, updating them with if x > largest / if x < smallest.",
+        "Keep a set called seen; if x is already in it, add x to another set of duplicates. Return sorted(dups)."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "list_stats([3, 1, 4, 1, 5, 9, 2, 6, 5])",
+            "visible": true
+          },
+          {
+            "expr": "list_stats([7])",
+            "visible": false
+          },
+          {
+            "expr": "list_stats([-3, -1, -3])",
+            "visible": false
+          },
+          {
+            "expr": "list_stats([2, 2, 2, 2])",
+            "visible": false
+          },
+          {
+            "expr": "list_stats([10, 20, 30])",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "def",
+          "for"
+        ],
+        "forbid": [
+          "max(",
+          "min("
+        ]
+      },
+      "minutes": 9,
+      "xp": 30
+    },
+    {
+      "title": "Searching",
+      "concept": "<b>Linear search</b> checks items one by one until it finds the target: simple, works on any list. <b>Binary search</b> needs a <i>sorted</i> list: look at the middle item; if the target is smaller, keep only the left half, otherwise the right half, and repeat. Searching 1,000,000 items takes about 20 steps instead of 1,000,000.",
+      "why": "Dictionaries, databases and phone contact lists use halving ideas to find things fast.",
+      "example": "nums = [1, 3, 5, 7, 9]\nlow, high = 0, len(nums) - 1\ntarget = 7\nwhile low <= high:\n    mid = (low + high) // 2\n    if nums[mid] == target:\n        print('found at', mid)\n        break\n    elif nums[mid] < target:\n        low = mid + 1\n    else:\n        high = mid - 1",
+      "example_note": "Binary search finds 7 at index 3.",
+      "prompt": "Write <code>binary_search(nums, target)</code> for a sorted list. Return the index of <code>target</code>, or <code>-1</code> if it is not there. Use a <code>while</code> loop.",
+      "starter": "def binary_search(nums, target):\n    low = 0\n    high = len(nums) - 1\n    # while low <= high: look at the middle and shrink the range\n    pass\n",
+      "solution": "def binary_search(nums, target):\n    low = 0\n    high = len(nums) - 1\n    while low <= high:\n        mid = (low + high) // 2\n        if nums[mid] == target:\n            return mid\n        elif nums[mid] < target:\n            low = mid + 1\n        else:\n            high = mid - 1\n    return -1\n",
+      "hints": [
+        "Compute mid = (low + high) // 2 inside the loop.",
+        "If nums[mid] is smaller than target, set low = mid + 1; if bigger, set high = mid - 1.",
+        "If nums[mid] == target, return mid. After the loop ends, return -1."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "binary_search([1, 3, 5, 7, 9], 7)",
+            "visible": true
+          },
+          {
+            "expr": "binary_search([], 4)",
+            "visible": false
+          },
+          {
+            "expr": "binary_search([5], 5)",
+            "visible": false
+          },
+          {
+            "expr": "binary_search([1, 3, 5], 2)",
+            "visible": false
+          },
+          {
+            "expr": "binary_search([2, 4, 6, 8], 8)",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "while"
+        ],
+        "forbid": [
+          ".index("
+        ]
+      },
+      "minutes": 9,
+      "xp": 30
+    },
+    {
+      "title": "Sorting",
+      "concept": "Sorting puts items in order. <b>Bubble sort</b> repeatedly swaps neighbours that are in the wrong order. <b>Selection sort</b> picks the smallest remaining item and puts it next. <b>Insertion sort</b> takes each item and slides it left into its place, like arranging playing cards in your hand. <b>Merge sort</b> and <b>quick sort</b> split the list, sort the parts and combine them, which is much faster for big lists. Example: insertion sort on [3, 1, 2] gives [1, 3, 2], then [1, 2, 3].",
+      "why": "Sorted data is easier to search, compare and display, from leaderboards to bank statements.",
+      "example": "nums = [4, 2, 5, 1]\nfor i in range(1, len(nums)):\n    key = nums[i]\n    j = i - 1\n    while j >= 0 and nums[j] > key:\n        nums[j + 1] = nums[j]\n        j -= 1\n    nums[j + 1] = key\nprint(nums)",
+      "example_note": "Insertion sort turns [4, 2, 5, 1] into [1, 2, 4, 5].",
+      "prompt": "Write <code>my_sort(nums)</code> that returns a new list with the numbers in ascending order. Use any algorithm you like (bubble, selection or insertion), but you may not use <code>sorted()</code> or <code>.sort()</code>.",
+      "starter": "def my_sort(nums):\n    result = list(nums)  # work on a copy\n    # sort result with your own loops\n    pass\n",
+      "solution": "def my_sort(nums):\n    result = list(nums)\n    for i in range(1, len(result)):\n        key = result[i]\n        j = i - 1\n        while j >= 0 and result[j] > key:\n            result[j + 1] = result[j]\n            j -= 1\n        result[j + 1] = key\n    return result\n",
+      "hints": [
+        "Copy the list first, then change the copy.",
+        "Bubble sort: repeat n times, swap result[j] and result[j+1] when the left one is bigger.",
+        "Do not forget to return result at the end."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "my_sort([5, 2, 9, 1])",
+            "visible": true
+          },
+          {
+            "expr": "my_sort([])",
+            "visible": false
+          },
+          {
+            "expr": "my_sort([1])",
+            "visible": false
+          },
+          {
+            "expr": "my_sort([3, -1, 3, 0])",
+            "visible": false
+          },
+          {
+            "expr": "my_sort([4, 3, 2, 1])",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "def",
+          "for"
+        ],
+        "forbid": [
+          "sorted(",
+          ".sort("
+        ]
+      },
+      "minutes": 9,
+      "xp": 30
+    },
+    {
+      "title": "Two Pointers",
+      "concept": "The <b>two pointers</b> trick uses two index variables that move towards each other (or in the same direction) so one pass is enough. To find two numbers in a <i>sorted</i> list that add to 9, put <code>left</code> at the start and <code>right</code> at the end. If the sum is too small move <code>left</code> up, if too big move <code>right</code> down. Reversing an array uses the same pointers: swap the ends, then move both inwards.",
+      "why": "It turns slow 'check every pair' code into fast one-pass code, used in matching, merging and cleaning data.",
+      "example": "nums = [1, 2, 4, 7, 11]\nleft, right = 0, len(nums) - 1\nwhile left < right:\n    s = nums[left] + nums[right]\n    if s == 9:\n        print(nums[left], nums[right])\n        break\n    elif s < 9:\n        left += 1\n    else:\n        right -= 1",
+      "example_note": "Finds the pair 2 and 7 that adds to 9.",
+      "prompt": "Write <code>pair_sum(nums, target)</code> for a sorted list. Return a tuple <code>(a, b)</code> of two values at different positions that add up to <code>target</code>, or <code>None</code> if there is no such pair. Use two pointers in a <code>while</code> loop.",
+      "starter": "def pair_sum(nums, target):\n    left = 0\n    right = len(nums) - 1\n    # while left < right: compare the sum with target and move a pointer\n    pass\n",
+      "solution": "def pair_sum(nums, target):\n    left = 0\n    right = len(nums) - 1\n    while left < right:\n        s = nums[left] + nums[right]\n        if s == target:\n            return (nums[left], nums[right])\n        elif s < target:\n            left += 1\n        else:\n            right -= 1\n    return None\n",
+      "hints": [
+        "Add nums[left] + nums[right] inside the loop.",
+        "Sum too small? left += 1. Sum too big? right -= 1.",
+        "When the sum equals target, return (nums[left], nums[right]). After the loop, return None."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "pair_sum([1, 2, 4, 7, 11], 9)",
+            "visible": true
+          },
+          {
+            "expr": "pair_sum([1, 2, 3], 10)",
+            "visible": false
+          },
+          {
+            "expr": "pair_sum([], 5)",
+            "visible": false
+          },
+          {
+            "expr": "pair_sum([-4, -1, 0, 3, 10], 6)",
+            "visible": false
+          },
+          {
+            "expr": "pair_sum([2, 2], 4)",
+            "visible": false
+          },
+          {
+            "expr": "pair_sum([5], 10)",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "while"
+        ]
+      },
+      "minutes": 9,
+      "xp": 30
+    },
+    {
+      "title": "Sliding Window",
+      "concept": "A <b>sliding window</b> is a fixed-size block that moves along a list one step at a time. Instead of re-adding every window from scratch, you add the new item that enters and subtract the item that leaves. For [2, 1, 5, 1] with k = 2: windows are 2+1=3, then 3+5-2=6, then 6+1-1=6.",
+      "why": "Moving averages, rate limits and 'best 7 days of sales' all use sliding windows.",
+      "example": "nums = [2, 1, 5, 1]\nk = 2\nwindow = sum(nums[:k])\nprint(window)\nfor i in range(k, len(nums)):\n    window += nums[i] - nums[i - k]\n    print(window)",
+      "example_note": "Prints each window sum: 3, 6, 6.",
+      "prompt": "Write <code>max_window_sum(nums, k)</code> that returns the largest sum of any <code>k</code> neighbouring numbers. If <code>k</code> is bigger than the list, return <code>0</code>. Slide the window instead of re-adding it each time.",
+      "starter": "def max_window_sum(nums, k):\n    if k > len(nums):\n        return 0\n    # sum the first k items, then slide: add the new one, remove the old one\n    pass\n",
+      "solution": "def max_window_sum(nums, k):\n    if k > len(nums):\n        return 0\n    window = sum(nums[:k])\n    best = window\n    for i in range(k, len(nums)):\n        window += nums[i] - nums[i - k]\n        if window > best:\n            best = window\n    return best\n",
+      "hints": [
+        "Start with window = sum(nums[:k]) and best = window.",
+        "Loop i from k to len(nums) - 1: window += nums[i] - nums[i - k].",
+        "After each slide, update best if window is larger. Return best."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "max_window_sum([2, 1, 5, 1, 3, 2], 3)",
+            "visible": true
+          },
+          {
+            "expr": "max_window_sum([4], 1)",
+            "visible": false
+          },
+          {
+            "expr": "max_window_sum([-1, -2, -3, -4], 2)",
+            "visible": false
+          },
+          {
+            "expr": "max_window_sum([1, 2], 5)",
+            "visible": false
+          },
+          {
+            "expr": "max_window_sum([5, 5, 5], 3)",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "def",
+          "for"
+        ]
+      },
+      "minutes": 9,
+      "xp": 30
+    },
+    {
+      "title": "Hashing",
+      "concept": "A <b>hash table</b> (a Python <code>dict</code>) finds a key almost instantly, no matter how big it is. A classic use is <b>frequency counting</b>: loop over the items and do <code>counts[x] = counts.get(x, 0) + 1</code>. For 'a b a' the counts become a: 2, b: 1. The same idea finds duplicates: any key whose count is above 1 is repeated.",
+      "why": "Word counts, vote tallies, inventory totals and 'have I seen this user?' checks all use hashing.",
+      "example": "words = 'to be or not to be'.split()\ncounts = {}\nfor w in words:\n    counts[w] = counts.get(w, 0) + 1\nprint(sorted(counts.items()))",
+      "example_note": "Counts words and prints them in alphabetical order.",
+      "prompt": "Write <code>word_counts(text)</code> that lowercases the text, splits it into words and returns a <b>sorted</b> list of <code>(word, count)</code> tuples. For an empty text return an empty list.",
+      "starter": "def word_counts(text):\n    counts = {}\n    # loop over the lowercase words and count them in the dict\n    pass\n",
+      "solution": "def word_counts(text):\n    counts = {}\n    for w in text.lower().split():\n        counts[w] = counts.get(w, 0) + 1\n    return sorted(counts.items())\n",
+      "hints": [
+        "text.lower().split() gives the list of words.",
+        "counts[w] = counts.get(w, 0) + 1 adds one to the count.",
+        "Finish with return sorted(counts.items())."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "word_counts('the cat the dog')",
+            "visible": true
+          },
+          {
+            "expr": "word_counts('')",
+            "visible": false
+          },
+          {
+            "expr": "word_counts('a')",
+            "visible": false
+          },
+          {
+            "expr": "word_counts('Go go GO')",
+            "visible": false
+          },
+          {
+            "expr": "word_counts('b a b a b')",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "split",
+          "def"
+        ]
+      },
+      "minutes": 9,
+      "xp": 30
+    },
+    {
+      "title": "Stack",
+      "concept": "A <b>stack</b> is last in, first out, like a pile of plates: you <code>append</code> to the top and <code>pop</code> from the top. To check balanced brackets, push every opening bracket; when you see a closing one, the top of the stack must be its matching opener. For '(]' the ']' arrives but the top is '(', so it is not balanced. At the end the stack must be empty.",
+      "why": "Undo buttons, browser back history and code editors checking your brackets all use stacks.",
+      "example": "stack = []\nstack.append('(')\nstack.append('[')\nprint(stack.pop())\nprint(stack)",
+      "example_note": "Pushes two brackets, then pops the most recent one.",
+      "prompt": "Write <code>is_balanced(s)</code> that returns <code>True</code> if every <code>(</code> <code>[</code> <code>{</code> in <code>s</code> is closed in the correct order, otherwise <code>False</code>. An empty string is balanced. Use a list as a stack with <code>append</code> and <code>pop</code>.",
+      "starter": "def is_balanced(s):\n    pairs = {')': '(', ']': '[', '}': '{'}\n    stack = []\n    # for each character: push openers, check closers against the top\n    pass\n",
+      "solution": "def is_balanced(s):\n    pairs = {')': '(', ']': '[', '}': '{'}\n    stack = []\n    for ch in s:\n        if ch in pairs.values():\n            stack.append(ch)\n        elif ch in pairs:\n            if not stack or stack.pop() != pairs[ch]:\n                return False\n    return len(stack) == 0\n",
+      "hints": [
+        "Push opening brackets with stack.append(ch).",
+        "For a closing bracket, fail if the stack is empty or stack.pop() is not the matching opener.",
+        "At the end return len(stack) == 0."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "is_balanced('([]{})')",
+            "visible": true
+          },
+          {
+            "expr": "is_balanced('(]')",
+            "visible": false
+          },
+          {
+            "expr": "is_balanced('')",
+            "visible": false
+          },
+          {
+            "expr": "is_balanced('(((')",
+            "visible": false
+          },
+          {
+            "expr": "is_balanced(')(')",
+            "visible": false
+          },
+          {
+            "expr": "is_balanced('{[()]}')",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "append",
+          "pop"
+        ]
+      },
+      "minutes": 9,
+      "xp": 30
+    },
+    {
+      "title": "Queue",
+      "concept": "A <b>queue</b> is first in, first out, like people waiting at a ticket counter: the one who joined first is served first. You <b>enqueue</b> at the back and <b>dequeue</b> from the front. A plain list is slow at removing from the front, so Python gives <code>collections.deque</code> with fast <code>append</code> and <code>popleft</code>.",
+      "why": "Print jobs, customer support tickets and message systems all line work up in queues.",
+      "example": "from collections import deque\nq = deque()\nq.append('Asha')\nq.append('Ravi')\nprint(q.popleft())\nprint(len(q))",
+      "example_note": "Asha joined first so she leaves first.",
+      "prompt": "Complete the class <code>Queue</code> using a <code>deque</code> inside. Methods: <code>enqueue(x)</code> adds to the back, <code>dequeue()</code> removes and returns the front item (or <code>None</code> if empty), <code>size()</code> gives the count, <code>is_empty()</code> gives <code>True</code>/<code>False</code>.",
+      "starter": "from collections import deque\n\nclass Queue:\n    def __init__(self):\n        self.items = deque()\n\n    # add enqueue, dequeue, size and is_empty below\n",
+      "solution": "from collections import deque\n\nclass Queue:\n    def __init__(self):\n        self.items = deque()\n\n    def enqueue(self, x):\n        self.items.append(x)\n\n    def dequeue(self):\n        if not self.items:\n            return None\n        return self.items.popleft()\n\n    def size(self):\n        return len(self.items)\n\n    def is_empty(self):\n        return len(self.items) == 0\n",
+      "hints": [
+        "Every method takes self as its first parameter.",
+        "enqueue uses self.items.append(x); dequeue uses self.items.popleft().",
+        "Check if not self.items before popleft, since popping an empty deque raises an error."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "(lambda q: (q.enqueue('a'), q.enqueue('b'), q.dequeue(), q.size()))(Queue())",
+            "visible": true
+          },
+          {
+            "expr": "(lambda q: (q.dequeue(), q.size(), q.is_empty()))(Queue())",
+            "visible": false
+          },
+          {
+            "expr": "(lambda q: (q.enqueue(1), q.enqueue(2), q.enqueue(3), q.dequeue(), q.dequeue(), q.dequeue(), q.dequeue(), q.is_empty()))(Queue())",
+            "visible": false
+          },
+          {
+            "expr": "(lambda q: (q.enqueue(5), q.is_empty(), q.size()))(Queue())",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "deque",
+          "class"
+        ]
+      },
+      "minutes": 9,
+      "xp": 30
+    },
+    {
+      "title": "Linked List",
+      "concept": "A <b>linked list</b> is a chain of <code>Node</code> objects. Each node holds a <code>value</code> and a <code>next</code> link to the following node; the last one has <code>next = None</code>. To <b>reverse</b> a list, walk along it with three names: <code>prev</code> (starts <code>None</code>), <code>cur</code> (the head) and a saved <code>nxt</code>. At each node point <code>cur.next</code> back at <code>prev</code>, then step forward. To <b>detect a cycle</b>, move a slow and a fast pointer; if they ever meet, the chain loops.",
+      "why": "Linked chains are behind music playlists, browser history and the way many languages manage memory.",
+      "example": "class Node:\n    def __init__(self, value):\n        self.value = value\n        self.next = None\n\na = Node(1)\nb = Node(2)\na.next = b\ncur = a\nwhile cur:\n    print(cur.value)\n    cur = cur.next",
+      "example_note": "Links two nodes and walks along them, printing 1 then 2.",
+      "prompt": "The <code>Node</code> class and helpers <code>build(values)</code> and <code>to_list(head)</code> are given. Write <code>reverse_list(head)</code> that reverses the chain and returns the new head. Use the <code>prev</code>/<code>cur</code> idea.",
+      "starter": "class Node:\n    def __init__(self, value):\n        self.value = value\n        self.next = None\n\ndef build(values):\n    head = None\n    for v in reversed(values):\n        node = Node(v)\n        node.next = head\n        head = node\n    return head\n\ndef to_list(head):\n    out = []\n    while head:\n        out.append(head.value)\n        head = head.next\n    return out\n\ndef reverse_list(head):\n    prev = None\n    cur = head\n    # while cur: save cur.next, point cur.next at prev, move both forward\n    pass\n",
+      "solution": "class Node:\n    def __init__(self, value):\n        self.value = value\n        self.next = None\n\ndef build(values):\n    head = None\n    for v in reversed(values):\n        node = Node(v)\n        node.next = head\n        head = node\n    return head\n\ndef to_list(head):\n    out = []\n    while head:\n        out.append(head.value)\n        head = head.next\n    return out\n\ndef reverse_list(head):\n    prev = None\n    cur = head\n    while cur:\n        nxt = cur.next\n        cur.next = prev\n        prev = cur\n        cur = nxt\n    return prev\n",
+      "hints": [
+        "Inside the loop first save nxt = cur.next so you do not lose the rest.",
+        "Then cur.next = prev, prev = cur, cur = nxt.",
+        "When the loop ends prev is the new head, so return prev."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "to_list(reverse_list(build([1, 2, 3])))",
+            "visible": true
+          },
+          {
+            "expr": "to_list(reverse_list(build([])))",
+            "visible": false
+          },
+          {
+            "expr": "to_list(reverse_list(build([7])))",
+            "visible": false
+          },
+          {
+            "expr": "to_list(reverse_list(build([1, 1, 2, -5])))",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "next",
+          "while"
+        ]
+      },
+      "minutes": 9,
+      "xp": 30
+    },
+    {
+      "title": "Trees",
+      "concept": "A <b>binary tree</b> is made of nodes that each have a <code>left</code> and a <code>right</code> child. In a <b>binary search tree (BST)</b> smaller values go left and bigger values go right. To insert 4 into a tree with root 5, go left (4 is less than 5) and place it there. Reading the tree <b>in-order</b> (left, node, right) gives the values in sorted order. Both steps are naturally recursive: do the same job on the left or right child.",
+      "why": "Trees organise file folders, web page structure (HTML) and database indexes.",
+      "example": "class Node:\n    def __init__(self, value):\n        self.value = value\n        self.left = None\n        self.right = None\n\nroot = Node(5)\nroot.left = Node(3)\nroot.right = Node(8)\ndef inorder(n):\n    return inorder(n.left) + [n.value] + inorder(n.right) if n else []\nprint(inorder(root))",
+      "example_note": "Prints the in-order values [3, 5, 8].",
+      "prompt": "The <code>Node</code> class and <code>build_bst(values)</code> (which calls your <code>insert</code> for each value) are given. Write <code>insert(root, value)</code> that adds a value to the BST and returns the root (ignore duplicates), and <code>inorder(root)</code> that returns the sorted list of values. An empty tree gives <code>[]</code>.",
+      "starter": "class Node:\n    def __init__(self, value):\n        self.value = value\n        self.left = None\n        self.right = None\n\ndef insert(root, value):\n    # if root is None, return a new Node\n    # smaller goes left, bigger goes right, equal is ignored\n    pass\n\ndef inorder(root):\n    # left subtree, then this value, then right subtree\n    pass\n\ndef build_bst(values):\n    root = None\n    for v in values:\n        root = insert(root, v)\n    return root\n",
+      "solution": "class Node:\n    def __init__(self, value):\n        self.value = value\n        self.left = None\n        self.right = None\n\ndef insert(root, value):\n    if root is None:\n        return Node(value)\n    if value < root.value:\n        root.left = insert(root.left, value)\n    elif value > root.value:\n        root.right = insert(root.right, value)\n    return root\n\ndef inorder(root):\n    if root is None:\n        return []\n    return inorder(root.left) + [root.value] + inorder(root.right)\n\ndef build_bst(values):\n    root = None\n    for v in values:\n        root = insert(root, v)\n    return root\n",
+      "hints": [
+        "Base case: if root is None, return Node(value) for insert and [] for inorder.",
+        "insert: when value < root.value set root.left = insert(root.left, value); when bigger do the same on the right.",
+        "inorder returns inorder(root.left) + [root.value] + inorder(root.right). Insert must return root."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "inorder(build_bst([5, 3, 8, 1, 4]))",
+            "visible": true
+          },
+          {
+            "expr": "inorder(build_bst([]))",
+            "visible": false
+          },
+          {
+            "expr": "inorder(build_bst([1]))",
+            "visible": false
+          },
+          {
+            "expr": "inorder(build_bst([3, 3, 3]))",
+            "visible": false
+          },
+          {
+            "expr": "inorder(build_bst([-2, 5, -7, 0]))",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "left",
+          "right"
+        ]
+      },
+      "minutes": 9,
+      "xp": 30
+    },
+    {
+      "title": "Graphs",
+      "concept": "A <b>graph</b> is dots (nodes) joined by lines (edges), stored as an <b>adjacency dict</b> such as <code>{'A': ['B', 'C'], 'B': [], 'C': []}</code> meaning A connects to B and C. <b>BFS</b> (breadth-first search) explores level by level using a queue: visit A, then B and C, then their neighbours. <b>DFS</b> (depth-first search) goes as deep as possible first using a stack or recursion. Always remember which nodes you have <code>visited</code> so loops do not run forever.",
+      "why": "Maps and route finding, social networks ('friends of friends') and web crawlers are all graph problems.",
+      "example": "from collections import deque\ngraph = {'A': ['B', 'C'], 'B': ['D'], 'C': [], 'D': []}\nseen = ['A']\nq = deque(['A'])\nwhile q:\n    node = q.popleft()\n    for n in graph[node]:\n        if n not in seen:\n            seen.append(n)\n            q.append(n)\nprint(seen)",
+      "example_note": "BFS from A visits A, B, C, D.",
+      "prompt": "Write <code>bfs(graph, start)</code> that returns the list of nodes in the order BFS visits them from <code>start</code>. Visit each node's neighbours in the order they appear in its list. Use a <code>deque</code>.",
+      "starter": "from collections import deque\n\ndef bfs(graph, start):\n    order = [start]\n    queue = deque([start])\n    # while queue: take the front node, add its unseen neighbours\n    pass\n",
+      "solution": "from collections import deque\n\ndef bfs(graph, start):\n    order = [start]\n    queue = deque([start])\n    while queue:\n        node = queue.popleft()\n        for n in graph.get(node, []):\n            if n not in order:\n                order.append(n)\n                queue.append(n)\n    return order\n",
+      "hints": [
+        "Pop the front with queue.popleft().",
+        "For each neighbour not yet in order, append it to both order and queue.",
+        "Return order when the queue is empty."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "bfs({1: [2, 3], 2: [4], 3: [4], 4: []}, 1)",
+            "visible": true
+          },
+          {
+            "expr": "bfs({'A': []}, 'A')",
+            "visible": false
+          },
+          {
+            "expr": "bfs({1: [2], 2: [3], 3: [1]}, 1)",
+            "visible": false
+          },
+          {
+            "expr": "bfs({1: [2], 2: [], 3: [1]}, 2)",
+            "visible": false
+          },
+          {
+            "expr": "bfs({'S': ['B', 'A'], 'A': ['C'], 'B': ['C'], 'C': []}, 'S')",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "deque",
+          "while"
+        ]
+      },
+      "minutes": 9,
+      "xp": 30
+    },
+    {
+      "title": "Recursion",
+      "concept": "<b>Recursion</b> means a function calls itself on a smaller version of the problem, with a <b>base case</b> that stops it. To list all <b>subsets</b> of [1, 2]: take the subsets of the rest [2], which are [] and [2], then also add 1 to each. That gives [], [2], [1], [1, 2]. <b>Permutations</b> work similarly: pick each item as the first one and arrange the rest.",
+      "why": "Folder trees, nested menus, puzzles and many search problems are solved most naturally with recursion.",
+      "example": "def total(n):\n    if n == 0:\n        return 0\n    return n + total(n - 1)\n\nprint(total(4))",
+      "example_note": "Adds 4 + 3 + 2 + 1 + 0 using a function that calls itself.",
+      "prompt": "Write a recursive <code>subsets(items)</code> that returns a list of all subsets of <code>items</code> (each subset as a list in the original order). Return the result <b>sorted</b> with <code>sorted(result)</code> so the order is predictable. <code>subsets([])</code> is <code>[[]]</code>.",
+      "starter": "def subsets(items):\n    # base case: no items -> only the empty subset\n    # otherwise: subsets of items[1:], with and without items[0]\n    pass\n",
+      "solution": "def subsets(items):\n    if not items:\n        return [[]]\n    rest = subsets(items[1:])\n    result = rest + [[items[0]] + s for s in rest]\n    return sorted(result)\n",
+      "hints": [
+        "Base case: if items is empty, return [[]].",
+        "Get rest = subsets(items[1:]). Every subset in rest is also valid on its own.",
+        "Also add [items[0]] + s for each s in rest. Return sorted(result)."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "subsets([1, 2, 3])",
+            "visible": true
+          },
+          {
+            "expr": "subsets([])",
+            "visible": false
+          },
+          {
+            "expr": "subsets([5])",
+            "visible": false
+          },
+          {
+            "expr": "subsets([1, 2])",
+            "visible": false
+          },
+          {
+            "expr": "subsets([-1, 0])",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "def",
+          "subsets("
+        ],
+        "forbid": [
+          "itertools"
+        ]
+      },
+      "minutes": 9,
+      "xp": 30
+    },
+    {
+      "title": "Backtracking",
+      "concept": "<b>Backtracking</b> builds an answer one choice at a time. If a choice breaks a rule, you <b>undo it</b> (step back) and try the next one. In the N-Queens puzzle you place one queen per row; for each column check that no earlier queen shares the column or a diagonal. If a row has no safe column, go back and move the previous queen. Two queens on diagonal share <code>row - col</code> or <code>row + col</code>.",
+      "why": "Sudoku solvers, maze finders and scheduling tools all try a choice, test it and undo it if it fails.",
+      "example": "def place(row, cols, n):\n    if row == n:\n        return 1\n    count = 0\n    for c in range(n):\n        if all(c != pc and abs(c - pc) != row - pr for pr, pc in enumerate(cols)):\n            count += place(row + 1, cols + [c], n)\n    return count\n\nprint(place(0, [], 4))",
+      "example_note": "Counts the 2 ways to place 4 queens safely on a 4x4 board.",
+      "prompt": "Write <code>count_queens(n)</code> that returns the number of ways to place <code>n</code> queens on an <code>n x n</code> board so that none attack each other.",
+      "starter": "def count_queens(n):\n    # place one queen per row, trying each column\n    # skip a column if it clashes with a queen in an earlier row\n    pass\n",
+      "solution": "def count_queens(n):\n    def place(row, cols):\n        if row == n:\n            return 1\n        count = 0\n        for c in range(n):\n            if all(c != pc and abs(c - pc) != row - pr for pr, pc in enumerate(cols)):\n                count += place(row + 1, cols + [c])\n        return count\n    return place(0, [])\n",
+      "hints": [
+        "Write a helper place(row, cols) where cols[i] is the column of the queen in row i.",
+        "Base case: row == n means every queen is placed, so return 1.",
+        "A column c clashes with a queen at (pr, pc) if c == pc or abs(c - pc) == row - pr."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "count_queens(4)",
+            "visible": true
+          },
+          {
+            "expr": "count_queens(1)",
+            "visible": false
+          },
+          {
+            "expr": "count_queens(2)",
+            "visible": false
+          },
+          {
+            "expr": "count_queens(5)",
+            "visible": false
+          },
+          {
+            "expr": "count_queens(6)",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "def",
+          "for"
+        ],
+        "forbid": [
+          "itertools"
+        ]
+      },
+      "minutes": 9,
+      "xp": 30
+    },
+    {
+      "title": "Dynamic Programming",
+      "concept": "<b>Dynamic programming</b> solves a big problem by solving small overlapping pieces <i>once</i> and remembering the answers (<b>memoization</b>). Fibonacci is the classic: <code>fib(n) = fib(n-1) + fib(n-2)</code>, and caching stops it recomputing the same values millions of times. <b>Climbing stairs</b> (1 or 2 steps at a time) has the same shape: ways(n) = ways(n-1) + ways(n-2). The <b>knapsack</b> problem uses the same idea: remember the best value for each capacity.",
+      "why": "Route planning, spell correction, text diffing and budgeting problems rely on dynamic programming.",
+      "example": "from functools import lru_cache\n\n@lru_cache(maxsize=None)\ndef fib(n):\n    if n < 2:\n        return n\n    return fib(n - 1) + fib(n - 2)\n\nprint(fib(50))",
+      "example_note": "Fast thanks to the cache: prints 12586269025.",
+      "prompt": "You can climb a staircase taking 1 or 2 steps at a time. Write <code>climb_stairs(n)</code> that returns how many different ways there are to reach step <code>n</code>. <code>climb_stairs(0)</code> is <code>1</code>. It must stay fast for <code>n = 40</code>.",
+      "starter": "def climb_stairs(n):\n    # ways(n) = ways(n - 1) + ways(n - 2)\n    # remember earlier answers so it stays fast\n    pass\n",
+      "solution": "def climb_stairs(n):\n    a, b = 1, 1\n    for _ in range(n):\n        a, b = b, a + b\n    return a\n",
+      "hints": [
+        "ways(0) = 1 and ways(1) = 1.",
+        "Each later answer is the sum of the previous two, like Fibonacci.",
+        "Loop n times keeping only the last two answers: a, b = b, a + b."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "climb_stairs(5)",
+            "visible": true
+          },
+          {
+            "expr": "climb_stairs(0)",
+            "visible": false
+          },
+          {
+            "expr": "climb_stairs(1)",
+            "visible": false
+          },
+          {
+            "expr": "climb_stairs(2)",
+            "visible": false
+          },
+          {
+            "expr": "climb_stairs(10)",
+            "visible": false
+          },
+          {
+            "expr": "climb_stairs(40)",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "def"
+        ]
+      },
+      "minutes": 9,
+      "xp": 30
+    }
+  ]
+}

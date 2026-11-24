@@ -1,0 +1,261 @@
+"""Generates level6.json. Run: python gen_level6.py"""
+import json
+from pathlib import Path
+
+L = []
+
+
+def lesson(**kw):
+    kw.setdefault("minutes", 5)
+    kw.setdefault("xp", 20)
+    L.append(kw)
+
+
+def cases(*exprs):
+    """First expr is visible, the rest are hidden edge cases."""
+    out = []
+    for i, e in enumerate(exprs):
+        d = {"expr": e}
+        if i:
+            d["visible"] = False
+        out.append(d)
+    return out
+
+
+lesson(
+    title="Classes",
+    concept="A <b>class</b> is a blueprint that describes something: what it knows and what it can do. You write one with the <code>class</code> keyword and a name that starts with a capital letter. "
+            "Things a class can do are written as <b>methods</b>: functions indented inside the class.",
+    why="Real programs model things such as users, orders and games. Each one is a class.",
+    example="class Dog:\n    def speak(self):\n        return 'Woof!'\n\nprint(Dog().speak())",
+    example_note="Defines a Dog blueprint with one method and calls it.",
+    prompt="Write a class <code>Dog</code> with a method <code>speak(self)</code> that returns the text <code>'Woof!'</code>.",
+    starter="class Dog:\n    # TODO: add a method speak(self) that returns 'Woof!'\n    pass\n",
+    solution="class Dog:\n    def speak(self):\n        return 'Woof!'\n",
+    hints=["Indent the method inside the class.", "Every method's first parameter is self.", "def speak(self): return 'Woof!'"],
+    tests={"cases": cases("Dog().speak()", "[Dog().speak(), Dog().speak()]", "type(Dog()).__name__"), "requires": ["class Dog", "def speak"]},
+)
+lesson(
+    title="Objects",
+    concept="An <b>object</b> is one real thing built from a class: <code>light = Light()</code>. You can create many objects from one class, and each keeps its own data. "
+            "Attach data to an object with a dot: <code>light.state = 'on'</code>.",
+    why="A shop might have thousands of product objects, all built from one Product class.",
+    example="class Light:\n    def describe(self):\n        return 'The light is ' + self.state\n\na = Light()\na.state = 'on'\nb = Light()\nb.state = 'off'\nprint(a.describe())\nprint(b.describe())",
+    example_note="Two objects from one class, each with its own state.",
+    prompt="The class <code>Light</code> is given. Write a function <code>make_light(state)</code> that creates a <code>Light()</code>, sets its <code>state</code> and returns it.",
+    starter="class Light:\n    def describe(self):\n        return 'The light is ' + self.state\n\n\ndef make_light(state):\n    # TODO: create a Light(), set its state, return it\n    pass\n",
+    solution="class Light:\n    def describe(self):\n        return 'The light is ' + self.state\n\n\ndef make_light(state):\n    light = Light()\n    light.state = state\n    return light\n",
+    hints=["Create the object with Light().", "Set light.state = state before returning.", "light = Light(); light.state = state; return light"],
+    tests={"cases": cases("make_light('on').describe()", "make_light('off').describe()", "[make_light('a').describe(), make_light('b').describe()]"), "requires": ["Light()", "return"]},
+)
+lesson(
+    title="Constructors (__init__)",
+    concept="Setting data after creating an object is tiring. The special method <code>__init__</code> is the <b>constructor</b>: Python runs it automatically when you write <code>Account('Asha', 100)</code>. "
+            "Inside it, store the values with <code>self.owner = owner</code>.",
+    why="Constructors make sure every object starts life with the data it needs.",
+    example="class Account:\n    def __init__(self, owner, balance):\n        self.owner = owner\n        self.balance = balance\n\na = Account('Asha', 100)\nprint(a.owner, a.balance)",
+    example_note="The constructor stores the owner and balance.",
+    prompt="Write a class <code>BankAccount</code> whose <code>__init__(self, owner, balance=0)</code> stores <code>self.owner</code> and <code>self.balance</code>. The balance defaults to <code>0</code>.",
+    starter="class BankAccount:\n    # TODO: write __init__(self, owner, balance=0)\n    pass\n",
+    solution="class BankAccount:\n    def __init__(self, owner, balance=0):\n        self.owner = owner\n        self.balance = balance\n",
+    hints=["The constructor is named __init__ with two underscores each side.", "Give balance a default value of 0.", "self.owner = owner; self.balance = balance"],
+    tests={"cases": cases("[BankAccount('Asha', 100).owner, BankAccount('Asha', 100).balance]", "BankAccount('Ravi').balance", "BankAccount('Mei', 5.5).balance"), "requires": ["__init__"]},
+)
+lesson(
+    title="Instance Variables",
+    concept="Variables stored on <code>self</code> are <b>instance variables</b>: every object gets its own copy. If one student gets a mark, the other students are not affected. "
+            "Create them inside <code>__init__</code>, including empty lists like <code>self.marks = []</code>.",
+    why="Each customer, player or document must keep its own data separate from the others.",
+    example="class Student:\n    def __init__(self, name):\n        self.name = name\n        self.marks = []\n\na = Student('Asha')\nb = Student('Ravi')\na.marks.append(90)\nprint(a.marks, b.marks)",
+    example_note="Only Asha's list changes; Ravi's stays empty.",
+    prompt="Write <code>Student(name)</code> that stores <code>self.name</code> and an empty list <code>self.marks</code>. Add a method <code>add_mark(self, mark)</code> that appends the mark and returns <code>self.marks</code>.",
+    starter="class Student:\n    def __init__(self, name):\n        # TODO: store name and an empty marks list\n        pass\n\n    def add_mark(self, mark):\n        # TODO: append mark, return self.marks\n        pass\n",
+    solution="class Student:\n    def __init__(self, name):\n        self.name = name\n        self.marks = []\n\n    def add_mark(self, mark):\n        self.marks.append(mark)\n        return self.marks\n",
+    hints=["Use self.marks = [] inside __init__.", "add_mark uses self.marks.append(mark).", "Finish add_mark with return self.marks."],
+    tests={"cases": cases("Student('Asha').add_mark(80)", "[Student('A').add_mark(1), Student('B').add_mark(2)]", "(lambda s: (s.add_mark(1), s.add_mark(2))[1])(Student('C'))"), "requires": ["self.marks"]},
+)
+lesson(
+    title="Class Variables",
+    concept="A <b>class variable</b> is written directly inside the class (not in a method) and is <b>shared</b> by every object. Read it with <code>ClassName.count</code> or <code>self.count</code>. "
+            "Use it for facts all objects share, like a company name or a counter of how many objects exist.",
+    why="Counters, default settings and constants are shared across all objects of a class.",
+    example="class Employee:\n    company = 'Rubitech'\n    count = 0\n\n    def __init__(self, name):\n        self.name = name\n        Employee.count += 1\n\nEmployee('Asha')\nEmployee('Ravi')\nprint(Employee.company, Employee.count)",
+    example_note="The shared counter goes up each time an Employee is created.",
+    prompt="Write <code>Employee(name)</code> with a class variable <code>company = 'Rubitech'</code> and a class variable <code>count = 0</code>. Each time an object is created, add 1 to <code>Employee.count</code>.",
+    starter="class Employee:\n    # TODO: class variables company and count\n\n    def __init__(self, name):\n        # TODO: store name and increase Employee.count\n        pass\n",
+    solution="class Employee:\n    company = 'Rubitech'\n    count = 0\n\n    def __init__(self, name):\n        self.name = name\n        Employee.count += 1\n",
+    hints=["Class variables sit directly under the class line.", "Inside __init__, write Employee.count += 1.", "company = 'Rubitech' and count = 0 above __init__."],
+    tests={"cases": cases("(Employee('A'), Employee('B'), Employee.count)[2]", "Employee('A').company", "[Employee.count, (Employee('A'), Employee.count)[1]]", "(Employee('A'), Employee('B').count)[1]"), "requires": ["Employee.count", "company"]},
+)
+lesson(
+    title="Instance Methods (self)",
+    concept="An <b>instance method</b> is a function inside a class whose first parameter is <code>self</code>. Python passes the object in as <code>self</code>, so the method can read the object's data: <code>self.width</code>. "
+            "You call it with a dot and no <code>self</code>: <code>rect.area()</code>.",
+    why="Methods let objects do work with their own data, like a cart totalling its own items.",
+    example="class Rectangle:\n    def __init__(self, width, height):\n        self.width = width\n        self.height = height\n\n    def area(self):\n        return self.width * self.height\n\nprint(Rectangle(3, 4).area())",
+    example_note="area uses the object's own width and height.",
+    prompt="The constructor of <code>Rectangle</code> is given. Add three methods: <code>area(self)</code>, <code>perimeter(self)</code> and <code>is_square(self)</code> (True when width equals height).",
+    starter="class Rectangle:\n    def __init__(self, width, height):\n        self.width = width\n        self.height = height\n\n    # TODO: area(self), perimeter(self), is_square(self)\n",
+    solution="class Rectangle:\n    def __init__(self, width, height):\n        self.width = width\n        self.height = height\n\n    def area(self):\n        return self.width * self.height\n\n    def perimeter(self):\n        return 2 * (self.width + self.height)\n\n    def is_square(self):\n        return self.width == self.height\n",
+    hints=["Each method takes self as the first parameter.", "Read data with self.width and self.height.", "perimeter is 2 * (self.width + self.height)."],
+    tests={"cases": cases("[Rectangle(3, 4).area(), Rectangle(3, 4).perimeter(), Rectangle(3, 4).is_square()]", "[Rectangle(5, 5).area(), Rectangle(5, 5).is_square()]", "[Rectangle(0, 7).area(), Rectangle(0, 7).perimeter()]"), "requires": ["def area", "def perimeter", "def is_square", "self.width"]},
+)
+lesson(
+    title="Class Methods (@classmethod)",
+    concept="A <b>class method</b> works with the class itself instead of one object. Put <code>@classmethod</code> above it and name the first parameter <code>cls</code>. "
+            "It is often used as an alternative constructor: <code>cls(...)</code> builds a new object.",
+    why="Factories like <code>Date.today()</code> or <code>User.from_json(text)</code> are class methods.",
+    example="class Temperature:\n    def __init__(self, celsius):\n        self.celsius = celsius\n\n    @classmethod\n    def from_kelvin(cls, k):\n        return cls(k - 273)\n\nprint(Temperature.from_kelvin(300).celsius)",
+    example_note="Builds a Temperature from a Kelvin value.",
+    prompt="<code>Temperature(celsius)</code> is given. Add a <code>@classmethod</code> called <code>from_fahrenheit(cls, f)</code> that returns <code>cls(round((f - 32) * 5 / 9, 1))</code>.",
+    starter="class Temperature:\n    def __init__(self, celsius):\n        self.celsius = celsius\n\n    # TODO: @classmethod from_fahrenheit(cls, f)\n",
+    solution="class Temperature:\n    def __init__(self, celsius):\n        self.celsius = celsius\n\n    @classmethod\n    def from_fahrenheit(cls, f):\n        return cls(round((f - 32) * 5 / 9, 1))\n",
+    hints=["Put @classmethod on the line above def.", "The first parameter is cls, not self.", "return cls(round((f - 32) * 5 / 9, 1))"],
+    tests={"cases": cases("Temperature.from_fahrenheit(212).celsius", "Temperature.from_fahrenheit(32).celsius", "Temperature.from_fahrenheit(-40).celsius"), "requires": ["@classmethod", "cls("]},
+)
+lesson(
+    title="Static Methods (@staticmethod)",
+    concept="A <b>static method</b> belongs to the class's namespace but needs neither <code>self</code> nor <code>cls</code>. Put <code>@staticmethod</code> above a normal function. "
+            "Use it for helper functions that are related to the class but do not touch any object's data.",
+    why="Utility checks such as validating a password or converting units are often static methods.",
+    example="class MathTools:\n    @staticmethod\n    def double(n):\n        return n * 2\n\nprint(MathTools.double(21))",
+    example_note="Calls a helper on the class without creating an object.",
+    prompt="Write a class <code>PasswordCheck</code> with a <code>@staticmethod</code> <code>is_strong(password)</code> that returns True when the password has at least 8 characters and contains at least one digit.",
+    starter="class PasswordCheck:\n    # TODO: @staticmethod is_strong(password)\n    pass\n",
+    solution="class PasswordCheck:\n    @staticmethod\n    def is_strong(password):\n        return len(password) >= 8 and any(ch.isdigit() for ch in password)\n",
+    hints=["Use @staticmethod and do not add self.", "len(password) >= 8 checks the length.", "any(ch.isdigit() for ch in password) checks for a digit."],
+    tests={"cases": cases("PasswordCheck.is_strong('abc12345')", "PasswordCheck.is_strong('abcdefgh')", "PasswordCheck.is_strong('a1')", "PasswordCheck().is_strong('12345678')"), "requires": ["@staticmethod"]},
+)
+lesson(
+    title="Encapsulation (data hiding, _protected / __private, properties)", minutes=8,
+    concept="<b>Encapsulation</b> means protecting an object's data. A single underscore (<code>_x</code>) says 'please do not touch', a double underscore (<code>__x</code>) makes the name <b>private</b>. "
+            "Offer safe access with a <code>@property</code>, which lets you read <code>acc.balance</code> like a variable, and change data only through methods that check the rules.",
+    why="Banks, games and shops must stop outside code from setting a balance to a nonsense value.",
+    example="class Wallet:\n    def __init__(self):\n        self.__cash = 0\n\n    @property\n    def cash(self):\n        return self.__cash\n\n    def add(self, n):\n        self.__cash += n\n\nw = Wallet()\nw.add(5)\nprint(w.cash)",
+    example_note="Cash is private but readable through a property.",
+    prompt="Write <code>Account(balance)</code> with a private <code>self.__balance</code> and a read-only <code>@property</code> <code>balance</code>. "
+           "<code>deposit(amount)</code> adds the amount and returns True only if amount &gt; 0 (else False). <code>withdraw(amount)</code> subtracts and returns True only if 0 &lt; amount &lt;= balance (else False).",
+    starter="class Account:\n    def __init__(self, balance):\n        # TODO: store the private __balance\n        pass\n\n    # TODO: @property balance\n\n    def deposit(self, amount):\n        # TODO\n        pass\n\n    def withdraw(self, amount):\n        # TODO\n        pass\n",
+    solution="class Account:\n    def __init__(self, balance):\n        self.__balance = balance\n\n    @property\n    def balance(self):\n        return self.__balance\n\n    def deposit(self, amount):\n        if amount > 0:\n            self.__balance += amount\n            return True\n        return False\n\n    def withdraw(self, amount):\n        if 0 < amount <= self.__balance:\n            self.__balance -= amount\n            return True\n        return False\n",
+    hints=["Name the variable self.__balance and expose it with @property def balance(self).", "Check the rule with an if before changing the balance.", "deposit: if amount > 0: add and return True; otherwise return False."],
+    tests={"cases": cases("Account(100).balance", "(lambda a: (a.deposit(50), a.withdraw(500), a.balance))(Account(100))", "(lambda a: (a.deposit(-5), a.withdraw(0), a.withdraw(30), a.balance))(Account(30))", "hasattr(Account(5), '__balance')"), "requires": ["__balance", "@property"]},
+)
+lesson(
+    title="Inheritance",
+    concept="<b>Inheritance</b> lets a new class reuse an existing one. Write the parent in brackets: <code>class Car(Vehicle):</code>. The child gets all the parent's methods and data for free, and you only add what is new.",
+    why="Instead of copy-pasting code for cars, bikes and trucks, you share it in a Vehicle parent.",
+    example="class Vehicle:\n    def __init__(self, brand):\n        self.brand = brand\n\n    def info(self):\n        return 'Brand: ' + self.brand\n\nclass Car(Vehicle):\n    def wheels(self):\n        return 4\n\nc = Car('Fiat')\nprint(c.info(), c.wheels())",
+    example_note="Car uses info() from Vehicle and adds wheels().",
+    prompt="<code>Vehicle</code> is given. Write <code>Car(Vehicle)</code> with <code>wheels(self)</code> returning <code>4</code>, and <code>Bike(Vehicle)</code> with <code>wheels(self)</code> returning <code>2</code>.",
+    starter="class Vehicle:\n    def __init__(self, brand):\n        self.brand = brand\n\n    def info(self):\n        return 'Brand: ' + self.brand\n\n\n# TODO: class Car(Vehicle) and class Bike(Vehicle), each with wheels(self)\nclass Car:\n    pass\n\n\nclass Bike:\n    pass\n",
+    solution="class Vehicle:\n    def __init__(self, brand):\n        self.brand = brand\n\n    def info(self):\n        return 'Brand: ' + self.brand\n\n\nclass Car(Vehicle):\n    def wheels(self):\n        return 4\n\n\nclass Bike(Vehicle):\n    def wheels(self):\n        return 2\n",
+    hints=["Put the parent's name in brackets after the class name.", "You do not need __init__ again; it is inherited.", "class Car(Vehicle): def wheels(self): return 4"],
+    tests={"cases": cases("[Car('Fiat').info(), Car('Fiat').wheels()]", "[Bike('BMX').info(), Bike('BMX').wheels()]", "[issubclass(Car, Vehicle), isinstance(Bike('x'), Vehicle)]"), "requires": ["(Vehicle)"]},
+)
+lesson(
+    title="Multiple Inheritance",
+    concept="A class can have more than one parent: <code>class Duck(Swimmer, Flyer):</code>. It then inherits abilities from all of them. Small parent classes that each add one ability are called <b>mixins</b>.",
+    why="Mixing abilities (saveable, printable, loggable) in one class avoids duplicate code.",
+    example="class Swimmer:\n    def swim(self):\n        return 'swims'\n\nclass Flyer:\n    def fly(self):\n        return 'flies'\n\nclass Duck(Swimmer, Flyer):\n    pass\n\nd = Duck()\nprint(d.swim(), d.fly())",
+    example_note="Duck gets swim and fly from two parents.",
+    prompt="<code>Swimmer</code> and <code>Flyer</code> are given. Write <code>Duck(Swimmer, Flyer)</code> with a method <code>abilities(self)</code> that returns a list of <code>self.swim()</code> and <code>self.fly()</code>.",
+    starter="class Swimmer:\n    def swim(self):\n        return 'swims'\n\n\nclass Flyer:\n    def fly(self):\n        return 'flies'\n\n\n# TODO: class Duck inheriting from both, with abilities(self)\nclass Duck:\n    pass\n",
+    solution="class Swimmer:\n    def swim(self):\n        return 'swims'\n\n\nclass Flyer:\n    def fly(self):\n        return 'flies'\n\n\nclass Duck(Swimmer, Flyer):\n    def abilities(self):\n        return [self.swim(), self.fly()]\n",
+    hints=["List both parents in the brackets, separated by a comma.", "Inside abilities, call self.swim() and self.fly().", "return [self.swim(), self.fly()]"],
+    tests={"cases": cases("Duck().abilities()", "[issubclass(Duck, Swimmer), issubclass(Duck, Flyer)]", "Duck().fly()"), "requires": ["(Swimmer, Flyer)"]},
+)
+lesson(
+    title="Polymorphism",
+    concept="<b>Polymorphism</b> ('many forms') means different classes can offer the same method name, each doing it in its own way. Code can then call <code>shape.area()</code> without caring whether it is a circle or a square.",
+    why="Games call <code>draw()</code> on every character and payment systems call <code>pay()</code> on every method, without checking the type.",
+    example="class Cat:\n    def speak(self):\n        return 'Meow'\n\nclass Cow:\n    def speak(self):\n        return 'Moo'\n\nfor animal in [Cat(), Cow()]:\n    print(animal.speak())",
+    example_note="The same call speak() gives different results.",
+    prompt="Write <code>Circle(r)</code> whose <code>area()</code> returns <code>round(math.pi * r * r, 2)</code>, and <code>Square(side)</code> whose <code>area()</code> returns <code>side * side</code>. Then write <code>total_area(shapes)</code> that returns the rounded (2 decimals) sum of <code>shape.area()</code> for each shape.",
+    starter="import math\n\n\nclass Circle:\n    # TODO: __init__(self, r) and area(self)\n    pass\n\n\nclass Square:\n    # TODO: __init__(self, side) and area(self)\n    pass\n\n\ndef total_area(shapes):\n    # TODO: add up shape.area() for each shape\n    pass\n",
+    solution="import math\n\n\nclass Circle:\n    def __init__(self, r):\n        self.r = r\n\n    def area(self):\n        return round(math.pi * self.r * self.r, 2)\n\n\nclass Square:\n    def __init__(self, side):\n        self.side = side\n\n    def area(self):\n        return self.side * self.side\n\n\ndef total_area(shapes):\n    return round(sum(s.area() for s in shapes), 2)\n",
+    hints=["Both classes get a method with the same name: area.", "total_area just loops and calls shape.area().", "return round(sum(s.area() for s in shapes), 2)"],
+    tests={"cases": cases("[Circle(2).area(), Square(3).area()]", "total_area([Circle(1), Square(2), Circle(0)])", "total_area([])"), "requires": ["def area", "total_area"]},
+)
+lesson(
+    title="Abstraction (abc, abstract classes)", minutes=7,
+    concept="An <b>abstract class</b> is a template that cannot be used directly. Inherit from <code>ABC</code> (from the <code>abc</code> module) and mark required methods with <code>@abstractmethod</code>. "
+            "Any child class <b>must</b> write those methods before you can create objects from it.",
+    why="Abstract classes define a contract, like 'every payment method must have a pay() method'.",
+    example="from abc import ABC, abstractmethod\n\nclass Shape(ABC):\n    @abstractmethod\n    def area(self):\n        pass\n\nclass Square(Shape):\n    def __init__(self, s):\n        self.s = s\n    def area(self):\n        return self.s ** 2\n\nprint(Square(4).area())",
+    example_note="Square fills in the area() that Shape demands.",
+    prompt="Make <code>Shape</code> an abstract class (inherit <code>ABC</code>) with an <code>@abstractmethod</code> <code>area(self)</code>. Then write <code>Rectangle(w, h)</code> (area = w * h) and <code>Triangle(b, h)</code> (area = b * h / 2) as children of <code>Shape</code>.",
+    starter="from abc import ABC, abstractmethod\n\n\nclass Shape:\n    # TODO: make this abstract with an abstract area(self)\n    pass\n\n\nclass Rectangle(Shape):\n    # TODO: __init__(self, w, h) and area(self)\n    pass\n\n\nclass Triangle(Shape):\n    # TODO: __init__(self, b, h) and area(self)\n    pass\n",
+    solution="from abc import ABC, abstractmethod\n\n\nclass Shape(ABC):\n    @abstractmethod\n    def area(self):\n        pass\n\n\nclass Rectangle(Shape):\n    def __init__(self, w, h):\n        self.w = w\n        self.h = h\n\n    def area(self):\n        return self.w * self.h\n\n\nclass Triangle(Shape):\n    def __init__(self, b, h):\n        self.b = b\n        self.h = h\n\n    def area(self):\n        return self.b * self.h / 2\n",
+    hints=["Write class Shape(ABC): and put @abstractmethod above area.", "The abstract method body can just be pass.", "Rectangle area is self.w * self.h; Triangle is self.b * self.h / 2."],
+    tests={"cases": cases("[Rectangle(2, 3).area(), Triangle(4, 5).area()]", "sorted(Shape.__abstractmethods__)", "[issubclass(Rectangle, Shape), Triangle(0, 9).area()]"), "requires": ["abstractmethod", "ABC"]},
+)
+lesson(
+    title="Method Overriding",
+    concept="<b>Overriding</b> means a child class writes a method with the <b>same name</b> as the parent's, so the child's version is used instead. The parent class itself stays unchanged.",
+    why="A general Notifier can send a message, while email and SMS notifiers each send it their own way.",
+    example="class Greeter:\n    def hello(self):\n        return 'Hello'\n\nclass Pirate(Greeter):\n    def hello(self):\n        return 'Ahoy'\n\nprint(Greeter().hello(), Pirate().hello())",
+    example_note="Pirate replaces hello() with its own version.",
+    prompt="<code>Notifier.send(msg)</code> is given. Override <code>send</code> in <code>EmailNotifier</code> so it returns <code>'Email: ' + msg</code>, and in <code>SMSNotifier</code> so it returns <code>'SMS: ' + msg</code>.",
+    starter="class Notifier:\n    def send(self, msg):\n        return 'Notification: ' + msg\n\n\nclass EmailNotifier(Notifier):\n    # TODO: override send\n    pass\n\n\nclass SMSNotifier(Notifier):\n    # TODO: override send\n    pass\n",
+    solution="class Notifier:\n    def send(self, msg):\n        return 'Notification: ' + msg\n\n\nclass EmailNotifier(Notifier):\n    def send(self, msg):\n        return 'Email: ' + msg\n\n\nclass SMSNotifier(Notifier):\n    def send(self, msg):\n        return 'SMS: ' + msg\n",
+    hints=["Use the exact same method name and parameters as the parent.", "Return a different text in each child.", "def send(self, msg): return 'Email: ' + msg"],
+    tests={"cases": cases("EmailNotifier().send('hi')", "[SMSNotifier().send('ok'), Notifier().send('ok')]", "EmailNotifier().send('')"), "requires": ["def send"]},
+)
+lesson(
+    title="super()",
+    concept="<code>super()</code> gives you the parent class. In a child's <code>__init__</code>, call <code>super().__init__(...)</code> so the parent sets up its part, then add the child's own data. This avoids repeating code.",
+    why="Every framework class you extend (web pages, game sprites) expects you to call super().__init__().",
+    example="class Person:\n    def __init__(self, name):\n        self.name = name\n\nclass Student(Person):\n    def __init__(self, name, school):\n        super().__init__(name)\n        self.school = school\n\ns = Student('Asha', 'MIT')\nprint(s.name, s.school)",
+    example_note="The parent stores name; the child stores school.",
+    prompt="<code>Person(name)</code> is given. Write <code>Student(Person)</code> with <code>__init__(self, name, school)</code> that uses <code>super().__init__(name)</code> and stores <code>self.school</code>. Add <code>describe(self)</code> returning <code>name + ' @ ' + school</code>.",
+    starter="class Person:\n    def __init__(self, name):\n        self.name = name\n\n\nclass Student(Person):\n    def __init__(self, name, school):\n        # TODO: call the parent constructor, then store school\n        pass\n\n    def describe(self):\n        # TODO: return 'NAME @ SCHOOL'\n        pass\n",
+    solution="class Person:\n    def __init__(self, name):\n        self.name = name\n\n\nclass Student(Person):\n    def __init__(self, name, school):\n        super().__init__(name)\n        self.school = school\n\n    def describe(self):\n        return self.name + ' @ ' + self.school\n",
+    hints=["Call super().__init__(name) first.", "Then set self.school = school.", "describe returns self.name + ' @ ' + self.school"],
+    tests={"cases": cases("Student('Asha', 'MIT').describe()", "[Student('Ravi', 'IIT').name, Student('Ravi', 'IIT').school]", "isinstance(Student('A', 'B'), Person)"), "requires": ["super()"]},
+)
+lesson(
+    title="MRO (Method Resolution Order)", minutes=7,
+    concept="When a class has several parents, Python must decide which parent's method to use. It follows the <b>Method Resolution Order</b>: the child first, then parents left to right, with shared ancestors last. "
+            "See it with <code>D.__mro__</code>. So <code>class D(B, C)</code> checks B before C.",
+    why="Understanding MRO explains surprising behaviour when mixing several parent classes.",
+    example="class A:\n    pass\nclass B(A):\n    pass\nclass C(A):\n    pass\nclass D(B, C):\n    pass\n\nprint([c.__name__ for c in D.__mro__])",
+    example_note="Prints D, B, C, A, object in lookup order.",
+    prompt="Write <code>A</code> with <code>hello()</code> returning <code>'A'</code>; <code>B(A)</code> returning <code>'B'</code>; <code>C(A)</code> returning <code>'C'</code>. "
+           "Then <code>D(B, C)</code> and <code>E(C, B)</code> with no methods of their own. Check which <code>hello</code> each one picks.",
+    starter="class A:\n    # TODO: hello(self) returns 'A'\n    pass\n\n\nclass B(A):\n    # TODO: hello(self) returns 'B'\n    pass\n\n\nclass C(A):\n    # TODO: hello(self) returns 'C'\n    pass\n\n\nclass D:\n    # TODO: inherit from B then C\n    pass\n\n\nclass E:\n    # TODO: inherit from C then B\n    pass\n",
+    solution="class A:\n    def hello(self):\n        return 'A'\n\n\nclass B(A):\n    def hello(self):\n        return 'B'\n\n\nclass C(A):\n    def hello(self):\n        return 'C'\n\n\nclass D(B, C):\n    pass\n\n\nclass E(C, B):\n    pass\n",
+    hints=["D lists B first, E lists C first.", "D and E need no body; use pass.", "class D(B, C): pass  and  class E(C, B): pass"],
+    tests={"cases": cases("[c.__name__ for c in D.__mro__]", "[D().hello(), E().hello()]", "[c.__name__ for c in E.__mro__]"), "requires": ["(B, C)", "(C, B)"]},
+)
+lesson(
+    title="Composition",
+    concept="<b>Composition</b> means an object <i>has</i> another object inside it, instead of <i>being</i> a kind of it. A Car <b>has an</b> Engine, so the Car stores an Engine in <code>self.engine</code> and asks it to do the engine's work.",
+    why="'Has-a' designs are flexible: you can swap an engine, a payment method or a logger without rewriting the whole class.",
+    example="class Engine:\n    def __init__(self, hp):\n        self.hp = hp\n    def start(self):\n        return f'Engine {self.hp}hp running'\n\nclass Car:\n    def __init__(self, hp):\n        self.engine = Engine(hp)\n\nprint(Car(90).engine.start())",
+    example_note="The Car owns an Engine and uses it.",
+    prompt="<code>Engine(hp)</code> is given. Write <code>Car(name, hp)</code> that builds <code>self.engine = Engine(hp)</code> and stores <code>self.name</code>. Its <code>start(self)</code> returns <code>name + ': ' + self.engine.start()</code>.",
+    starter="class Engine:\n    def __init__(self, hp):\n        self.hp = hp\n\n    def start(self):\n        return f'Engine {self.hp}hp running'\n\n\nclass Car:\n    def __init__(self, name, hp):\n        # TODO: store name and create self.engine\n        pass\n\n    def start(self):\n        # TODO: use self.engine.start()\n        pass\n",
+    solution="class Engine:\n    def __init__(self, hp):\n        self.hp = hp\n\n    def start(self):\n        return f'Engine {self.hp}hp running'\n\n\nclass Car:\n    def __init__(self, name, hp):\n        self.name = name\n        self.engine = Engine(hp)\n\n    def start(self):\n        return self.name + ': ' + self.engine.start()\n",
+    hints=["Car does not inherit from Engine; it stores one.", "self.engine = Engine(hp) inside __init__.", "start returns self.name + ': ' + self.engine.start()"],
+    tests={"cases": cases("Car('Zen', 90).start()", "Car('Zen', 90).engine.hp", "Car('Tiny', 0).start()"), "requires": ["self.engine"]},
+)
+lesson(
+    title="Magic Methods (__str__, __len__, __call__, __eq__ ...)", minutes=9,
+    concept="Methods with double underscores on both sides are <b>magic methods</b>; Python calls them for you. <code>__str__</code> controls <code>str(obj)</code> and <code>print</code>, <code>__len__</code> controls <code>len(obj)</code>, "
+            "<code>__eq__</code> controls <code>==</code>, and <code>__call__</code> lets you use the object like a function: <code>obj(3)</code>.",
+    why="Magic methods make your own classes feel built-in: printable, countable, comparable and callable.",
+    example="class Box:\n    def __init__(self, items):\n        self.items = items\n    def __len__(self):\n        return len(self.items)\n    def __str__(self):\n        return f'Box of {len(self)}'\n\nb = Box(['a', 'b'])\nprint(b, len(b))",
+    example_note="print and len both use the magic methods.",
+    prompt="Write <code>Playlist(name, songs)</code> (songs is a list). Add <code>__str__</code> returning <code>'NAME (N songs)'</code>, <code>__len__</code> returning the number of songs, "
+           "<code>__eq__(self, other)</code> returning True when both songs lists are equal, and <code>__call__(self, i)</code> returning the song at index <code>i</code>.",
+    starter="class Playlist:\n    def __init__(self, name, songs):\n        self.name = name\n        self.songs = songs\n\n    # TODO: __str__, __len__, __eq__(self, other), __call__(self, i)\n",
+    solution="class Playlist:\n    def __init__(self, name, songs):\n        self.name = name\n        self.songs = songs\n\n    def __str__(self):\n        return f'{self.name} ({len(self.songs)} songs)'\n\n    def __len__(self):\n        return len(self.songs)\n\n    def __eq__(self, other):\n        return self.songs == other.songs\n\n    def __call__(self, i):\n        return self.songs[i]\n",
+    hints=["Each magic method has two underscores before and after its name.", "__str__ must return text, e.g. f'{self.name} ({len(self.songs)} songs)'.", "__eq__ compares self.songs == other.songs; __call__ returns self.songs[i]."],
+    tests={"cases": cases("[str(Playlist('Gym', ['a', 'b'])), len(Playlist('Gym', ['a', 'b']))]", "[Playlist('X', ['a']) == Playlist('Y', ['a']), Playlist('X', ['a']) == Playlist('X', ['b'])]", "[Playlist('E', []).__len__(), str(Playlist('E', [])), Playlist('P', ['s1', 's2'])(1)]"), "requires": ["__str__", "__len__", "__eq__", "__call__"]},
+)
+
+out = {"title": "Level 6 · Object-Oriented Programming",
+       "blurb": "Build your own types with classes, objects, inheritance and magic methods.",
+       "lessons": L}
+Path(__file__).with_name("level6.json").write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
+print("wrote level6.json with", len(L), "lessons")

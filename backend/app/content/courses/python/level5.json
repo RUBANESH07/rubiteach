@@ -1,0 +1,493 @@
+{
+  "title": "Level 5 · Intermediate Python",
+  "blurb": "Comprehensions, modules, error handling and working with files, JSON, CSV and regular expressions.",
+  "lessons": [
+    {
+      "title": "List Comprehension",
+      "concept": "A <b>list comprehension</b> builds a new list in one line: <code>[expression for item in items if condition]</code>. It is a short form of a loop that appends to a list. The <code>if</code> part is optional and keeps only matching items.",
+      "why": "Cleaning and transforming lists of data is a daily job, and comprehensions make it short and readable.",
+      "example": "nums = [1, 2, 3, 4, 5]\nprint([n * 10 for n in nums])\nprint([n for n in nums if n % 2 == 1])",
+      "example_note": "Multiplies every number by 10, then keeps only the odd ones.",
+      "prompt": "Write <code>squares_of_evens(nums)</code> that returns a list of the squares of only the even numbers, using a list comprehension (no <code>append</code>).",
+      "starter": "def squares_of_evens(nums):\n    # return [... for n in nums if ...]\n    pass\n",
+      "solution": "def squares_of_evens(nums):\n    return [n * n for n in nums if n % 2 == 0]",
+      "hints": [
+        "Shape: [what_to_keep for n in nums if condition].",
+        "Even means n % 2 == 0.",
+        "return [n * n for n in nums if n % 2 == 0]"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "squares_of_evens([1, 2, 3, 4, 5, 6])",
+            "visible": true
+          },
+          {
+            "expr": "squares_of_evens([])",
+            "visible": false
+          },
+          {
+            "expr": "squares_of_evens([1, 3, 5])",
+            "visible": false
+          },
+          {
+            "expr": "squares_of_evens([0, -2])",
+            "visible": false
+          }
+        ],
+        "requires": [
+          " for ",
+          " in "
+        ],
+        "forbid": [
+          "append"
+        ]
+      },
+      "minutes": 6,
+      "xp": 20
+    },
+    {
+      "title": "Dictionary Comprehension",
+      "concept": "A <b>dictionary comprehension</b> builds a dict in one line using curly braces and a <code>key: value</code> pair: <code>{word: len(word) for word in words}</code>. It works just like a list comprehension.",
+      "why": "Turning a list into a lookup table, like name to score or product to price, is very common.",
+      "example": "fruits = ['apple', 'fig']\nprint({f: len(f) for f in fruits})",
+      "example_note": "Maps each fruit to the length of its name.",
+      "prompt": "Write <code>name_lengths(names)</code> that returns a dictionary mapping each name to its length, using a dictionary comprehension.",
+      "starter": "def name_lengths(names):\n    # return {key: value for ... in names}\n    pass\n",
+      "solution": "def name_lengths(names):\n    return {name: len(name) for name in names}",
+      "hints": [
+        "Curly braces with key: value, then for ... in names.",
+        "The key is the name, the value is len(name).",
+        "return {name: len(name) for name in names}"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "name_lengths(['Asha', 'Ravi', 'Meenakshi'])",
+            "visible": true
+          },
+          {
+            "expr": "name_lengths([])",
+            "visible": false
+          },
+          {
+            "expr": "name_lengths(['Al', 'Al'])",
+            "visible": false
+          }
+        ],
+        "requires": [
+          " for ",
+          "{"
+        ],
+        "forbid": [
+          "dict("
+        ]
+      },
+      "minutes": 6,
+      "xp": 20
+    },
+    {
+      "title": "Set Comprehension",
+      "concept": "A <b>set comprehension</b> looks like a dictionary one but with a single value: <code>{x for x in items}</code>. A set keeps each value only once, so duplicates disappear automatically.",
+      "why": "Finding the unique cities, tags or first letters in a pile of data is a set job.",
+      "example": "words = ['apple', 'avocado', 'banana']\nprint(sorted({w[0] for w in words}))",
+      "example_note": "Collects the unique first letters (sorted so the output is stable).",
+      "prompt": "Write <code>unique_first_letters(words)</code> that returns a <b>set</b> of the lowercase first letters of the words, using a set comprehension.",
+      "starter": "def unique_first_letters(words):\n    # return {... for w in words}\n    pass\n",
+      "solution": "def unique_first_letters(words):\n    return {w[0].lower() for w in words}",
+      "hints": [
+        "Use curly braces with one expression and a for.",
+        "w[0] is the first letter; .lower() makes it lowercase.",
+        "return {w[0].lower() for w in words}"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "sorted(unique_first_letters(['apple', 'Avocado', 'banana']))",
+            "visible": true
+          },
+          {
+            "expr": "sorted(unique_first_letters([]))",
+            "visible": false
+          },
+          {
+            "expr": "sorted(unique_first_letters(['Zed', 'zoo', 'Yak']))",
+            "visible": false
+          },
+          {
+            "expr": "type(unique_first_letters(['a'])).__name__",
+            "visible": false
+          }
+        ],
+        "requires": [
+          " for ",
+          "{"
+        ],
+        "forbid": [
+          "set("
+        ]
+      },
+      "minutes": 6,
+      "xp": 20
+    },
+    {
+      "title": "Generator Expression",
+      "concept": "A <b>generator expression</b> is a comprehension in round brackets: <code>(x * x for x in range(5))</code>. It does not build a list; it produces values one at a time when asked, which saves memory. Functions like <code>sum()</code> accept it directly: <code>sum(x for x in nums)</code>.",
+      "why": "When data is huge (millions of rows), a generator avoids storing everything at once.",
+      "example": "squares = (n * n for n in range(1, 4))\nprint(next(squares))\nprint(sum(n * n for n in range(1, 4)))",
+      "example_note": "Takes one value from a generator, then sums another one.",
+      "prompt": "Write <code>sum_of_squares(n)</code> that returns <code>1*1 + 2*2 + ... + n*n</code> using <code>sum()</code> with a generator expression (do not build a list with square brackets).",
+      "starter": "def sum_of_squares(n):\n    # sum(... for i in range(...))\n    pass\n",
+      "solution": "def sum_of_squares(n):\n    return sum(i * i for i in range(1, n + 1))",
+      "hints": [
+        "range(1, n + 1) gives 1 up to n.",
+        "Pass the generator straight into sum(...).",
+        "return sum(i * i for i in range(1, n + 1))"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "sum_of_squares(3)",
+            "visible": true
+          },
+          {
+            "expr": "sum_of_squares(0)",
+            "visible": false
+          },
+          {
+            "expr": "sum_of_squares(1)",
+            "visible": false
+          },
+          {
+            "expr": "sum_of_squares(100)",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "sum(",
+          " for "
+        ],
+        "forbid": [
+          "["
+        ]
+      },
+      "minutes": 6,
+      "xp": 20
+    },
+    {
+      "title": "Modules (import, custom modules)",
+      "minutes": 7,
+      "concept": "A <b>module</b> is a file of ready-made Python code. Load it with <code>import math</code> and use its tools as <code>math.sqrt(16)</code>. Python ships with many (<code>math</code>, <code>statistics</code>, <code>random</code>). Your own file <code>tools.py</code> is also a module: <code>import tools</code>.",
+      "why": "Modules let you reuse tested code instead of writing everything yourself, and keep big projects organised in files.",
+      "example": "import math\nimport statistics\n\nprint(math.sqrt(49))\nprint(statistics.mean([2, 4, 9]))",
+      "example_note": "Imports two standard modules and uses one function from each.",
+      "prompt": "Read one line of space-separated numbers. Import <code>statistics</code> and <code>math</code>, then print the mean on the first line and the mean rounded <b>down</b> (<code>math.floor</code>) on the second. Example: <code>10 20 30</code> prints <code>20.0</code> then <code>20</code>.",
+      "starter": "# import statistics and math here\n\nnums = [float(x) for x in input().split()]\n# print the mean, then the floor of the mean\n",
+      "solution": "import statistics\nimport math\n\nnums = [float(x) for x in input().split()]\nmean = statistics.mean(nums)\nprint(mean)\nprint(math.floor(mean))",
+      "hints": [
+        "Put import statistics and import math at the top.",
+        "statistics.mean(nums) gives the average.",
+        "Print the mean, then print(math.floor(mean))."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "stdin": "10 20 30\n"
+          },
+          {
+            "stdin": "1 2\n",
+            "visible": false
+          },
+          {
+            "stdin": "7\n",
+            "visible": false
+          },
+          {
+            "stdin": "2.5 3.5 9\n",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "import",
+          "statistics.",
+          "math."
+        ]
+      },
+      "xp": 20
+    },
+    {
+      "title": "Packages",
+      "concept": "A <b>package</b> is a folder of modules, with a file named <code>__init__.py</code> marking it as a package. Inside it modules can be grouped, e.g. <code>shop/billing.py</code> is imported as <code>import shop.billing</code> or <code>from shop import billing</code>. The standard library has packages too: <code>os</code> is a package and <code>os.path</code> is a module inside it.",
+      "why": "Packages organise large projects into folders, and almost every third-party library you install is a package.",
+      "example": "import os.path\n\nprint(os.path.basename('notes/todo.txt'))\nprint(os.path.splitext('photo.png'))",
+      "example_note": "Uses the path module that lives inside the os package.",
+      "prompt": "Use <code>import os.path</code> to write <code>split_name(filename)</code> that returns the result of <code>os.path.splitext(filename)</code>: the name and the extension as a tuple.",
+      "starter": "# import os.path\n\ndef split_name(filename):\n    # return os.path.splitext(filename)\n    pass\n",
+      "solution": "import os.path\n\ndef split_name(filename):\n    return os.path.splitext(filename)",
+      "hints": [
+        "Put import os.path at the top of the file.",
+        "os.path.splitext splits at the last dot.",
+        "return os.path.splitext(filename)"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "split_name('report.pdf')",
+            "visible": true
+          },
+          {
+            "expr": "split_name('archive.tar.gz')",
+            "visible": false
+          },
+          {
+            "expr": "split_name('README')",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "import",
+          "os.path"
+        ]
+      },
+      "minutes": 6,
+      "xp": 20
+    },
+    {
+      "title": "Exception Handling (try, except, finally)",
+      "minutes": 7,
+      "concept": "An <b>exception</b> is an error that stops your program, like dividing by zero. Wrap risky code in <code>try:</code> and catch the problem with <code>except ZeroDivisionError:</code> so the program carries on. A <code>finally:</code> block runs at the end whether or not an error happened.",
+      "why": "Real programs must survive bad input, missing files and network failures instead of crashing.",
+      "example": "try:\n    print(10 / 0)\nexcept ZeroDivisionError:\n    print('Cannot divide by zero')\nfinally:\n    print('Done')",
+      "example_note": "Catches the error, prints a friendly message, then runs finally.",
+      "prompt": "Write <code>safe_divide(a, b)</code> that returns <code>a / b</code>, but returns the text <code>'Cannot divide by zero'</code> when <code>b</code> is 0. Use <code>try</code> and <code>except</code>.",
+      "starter": "def safe_divide(a, b):\n    # try the division, catch ZeroDivisionError\n    pass\n",
+      "solution": "def safe_divide(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        return 'Cannot divide by zero'",
+      "hints": [
+        "Put the division inside try:",
+        "Catch it with except ZeroDivisionError:",
+        "try: return a / b  /  except ZeroDivisionError: return 'Cannot divide by zero'"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "safe_divide(10, 2)",
+            "visible": true
+          },
+          {
+            "expr": "safe_divide(1, 0)",
+            "visible": false
+          },
+          {
+            "expr": "safe_divide(7, 2)",
+            "visible": false
+          },
+          {
+            "expr": "safe_divide(0, 5)",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "try",
+          "except"
+        ]
+      },
+      "xp": 20
+    },
+    {
+      "title": "Custom Exceptions (raise)",
+      "minutes": 8,
+      "concept": "You can signal your own errors with <code>raise</code>. Make a new error type by writing a class that inherits from <code>Exception</code>: <code>class MyError(Exception): pass</code>. Then <code>raise MyError('message')</code> stops the function, and callers can catch it with <code>except MyError as e</code>; <code>str(e)</code> is the message.",
+      "why": "Custom errors give clear names to problems in your own rules, like <code>InsufficientFunds</code> in a banking app.",
+      "example": "class TooYoung(Exception):\n    pass\n\ndef check_age(age):\n    if age < 18:\n        raise TooYoung('Must be 18 or older')\n    return 'OK'\n\ntry:\n    check_age(15)\nexcept TooYoung as e:\n    print('Error:', e)",
+      "example_note": "Raises a custom error and catches it, printing its message.",
+      "prompt": "Create <code>class InsufficientFunds(Exception)</code>. Write <code>withdraw(balance, amount)</code> that raises <code>InsufficientFunds('Not enough money')</code> if <code>amount</code> is more than <code>balance</code>, otherwise returns the new balance. The <code>check</code> helper is already written for you.",
+      "starter": "# 1. define the InsufficientFunds exception class\n# 2. define withdraw(balance, amount) that uses raise\n\ndef check(balance, amount):\n    try:\n        return withdraw(balance, amount)\n    except InsufficientFunds as e:\n        return f'Error: {e}'\n",
+      "solution": "class InsufficientFunds(Exception):\n    pass\n\ndef withdraw(balance, amount):\n    if amount > balance:\n        raise InsufficientFunds('Not enough money')\n    return balance - amount\n\ndef check(balance, amount):\n    try:\n        return withdraw(balance, amount)\n    except InsufficientFunds as e:\n        return f'Error: {e}'",
+      "hints": [
+        "class InsufficientFunds(Exception): with pass inside.",
+        "In withdraw, test amount > balance first.",
+        "raise InsufficientFunds('Not enough money') in that if; otherwise return balance - amount."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "check(100, 30)",
+            "visible": true
+          },
+          {
+            "expr": "check(100, 500)",
+            "visible": false
+          },
+          {
+            "expr": "check(50, 50)",
+            "visible": false
+          },
+          {
+            "expr": "check(0, 1)",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "raise",
+          "class",
+          "Exception"
+        ]
+      },
+      "xp": 20
+    },
+    {
+      "title": "File Handling (read, write, append)",
+      "minutes": 8,
+      "concept": "Open a file with <code>with open('name.txt', mode) as f:</code>; the <code>with</code> closes it for you. Modes: <code>'r'</code> read, <code>'w'</code> write (erases old content), <code>'a'</code> append (adds at the end). Use <code>f.write(text)</code> to write and <code>f.read()</code> to read it all back.",
+      "why": "Saving notes, logs and results to disk lets data live after your program ends.",
+      "example": "with open('hello.txt', 'w') as f:\n    f.write('Line one\\n')\nwith open('hello.txt', 'a') as f:\n    f.write('Line two\\n')\nwith open('hello.txt') as f:\n    print(f.read())",
+      "example_note": "Writes a file, appends to it, then reads it back.",
+      "prompt": "Write <code>make_notes(first, second)</code>. It writes <code>first</code> and a newline into <code>notes.txt</code> (mode <code>'w'</code>), appends <code>second</code> and a newline (mode <code>'a'</code>), then reads the file and returns its lines as a list (<code>splitlines()</code>).",
+      "starter": "def make_notes(first, second):\n    # write first, append second, read back\n    pass\n",
+      "solution": "def make_notes(first, second):\n    with open('notes.txt', 'w') as f:\n        f.write(first + '\\n')\n    with open('notes.txt', 'a') as f:\n        f.write(second + '\\n')\n    with open('notes.txt') as f:\n        return f.read().splitlines()",
+      "hints": [
+        "Use three with open(...) blocks: write, append, read.",
+        "Write with f.write(first + '\\n') in mode 'w'.",
+        "Return f.read().splitlines() from the last block."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "make_notes('Buy milk', 'Call Ravi')",
+            "visible": true
+          },
+          {
+            "expr": "make_notes('a', 'b')",
+            "visible": false
+          },
+          {
+            "expr": "make_notes('', 'x')",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "with open",
+          "write("
+        ]
+      },
+      "xp": 20
+    },
+    {
+      "title": "JSON Handling",
+      "minutes": 8,
+      "concept": "<b>JSON</b> is a text format for data that looks like Python dicts and lists. <code>json.dumps(obj)</code> turns an object into a JSON string and <code>json.loads(text)</code> turns it back. <code>json.dump(obj, file)</code> and <code>json.load(file)</code> do the same with open files.",
+      "why": "Websites, apps and settings files all exchange data as JSON.",
+      "example": "import json\n\ndata = {'name': 'Asha', 'age': 20}\ntext = json.dumps(data)\nprint(text)\nprint(json.loads(text)['name'])",
+      "example_note": "Converts a dict to a JSON string and reads a value back.",
+      "prompt": "Write <code>save_and_load(data)</code>: save <code>data</code> to <code>data.json</code> with <code>json.dump</code>, read it back with <code>json.load</code>, and return <code>json.dumps(loaded, sort_keys=True)</code>.",
+      "starter": "import json\n\ndef save_and_load(data):\n    # json.dump to a file, json.load it back, return json.dumps(..., sort_keys=True)\n    pass\n",
+      "solution": "import json\n\ndef save_and_load(data):\n    with open('data.json', 'w') as f:\n        json.dump(data, f)\n    with open('data.json') as f:\n        loaded = json.load(f)\n    return json.dumps(loaded, sort_keys=True)",
+      "hints": [
+        "Open data.json with 'w' and call json.dump(data, f).",
+        "Open it again for reading and call json.load(f).",
+        "return json.dumps(loaded, sort_keys=True)"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "save_and_load({'name': 'Asha', 'age': 20})",
+            "visible": true
+          },
+          {
+            "expr": "save_and_load([1, 2, 3])",
+            "visible": false
+          },
+          {
+            "expr": "save_and_load({'ok': True, 'items': [], 'none': None})",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "json.dump(",
+          "json.load("
+        ]
+      },
+      "xp": 20
+    },
+    {
+      "title": "CSV Handling",
+      "minutes": 8,
+      "concept": "<b>CSV</b> files store tables as text, one row per line with values separated by commas. <code>csv.reader(file)</code> gives each row as a list of strings, and <code>csv.writer(file)</code> writes rows with <code>writerow()</code>. Any file-like object works, including <code>io.StringIO(text)</code>, a file made from a string.",
+      "why": "Spreadsheets and exported reports are CSV files, so reading them is a common data task.",
+      "example": "import csv\nimport io\n\ntext = 'item,price\\npen,10\\nbook,45'\nfor row in csv.reader(io.StringIO(text)):\n    print(row)",
+      "example_note": "Prints each row as a list of strings.",
+      "prompt": "Write <code>total_price(csv_text)</code> that reads CSV text with a header row (<code>item,price</code>) using <code>csv.reader</code> and returns the sum of the prices as an integer.",
+      "starter": "import csv\nimport io\n\ndef total_price(csv_text):\n    # reader = csv.reader(io.StringIO(csv_text)); skip the header with next(reader)\n    pass\n",
+      "solution": "import csv\nimport io\n\ndef total_price(csv_text):\n    reader = csv.reader(io.StringIO(csv_text))\n    next(reader)\n    total = 0\n    for row in reader:\n        total += int(row[1])\n    return total",
+      "hints": [
+        "Call next(reader) once to skip the header.",
+        "Each row is a list: row[1] is the price text, so use int().",
+        "Loop over reader, add int(row[1]) to a total and return it."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "total_price('item,price\\npen,10\\nbook,45')",
+            "visible": true
+          },
+          {
+            "expr": "total_price('item,price')",
+            "visible": false
+          },
+          {
+            "expr": "total_price('item,price\\ntea,5')",
+            "visible": false
+          },
+          {
+            "expr": "total_price('item,price\\na,1\\nb,2\\nc,3\\n')",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "csv.reader"
+        ]
+      },
+      "xp": 20
+    },
+    {
+      "title": "Regular Expressions (re module)",
+      "minutes": 8,
+      "concept": "A <b>regular expression</b> is a pattern for finding text. With <code>import re</code>, <code>re.findall(pattern, text)</code> returns all matches as a list. In patterns <code>\\d</code> means a digit, <code>+</code> means one or more, so <code>\\d+</code> matches whole numbers. Write patterns as raw strings: <code>r'\\d+'</code>.",
+      "why": "Validating emails and phone numbers or pulling data out of messy text are classic regex jobs.",
+      "example": "import re\n\ntext = 'Order 12 has 3 items'\nprint(re.findall(r'\\d+', text))\nprint(bool(re.search(r'items', text)))",
+      "example_note": "Finds the numbers in a sentence, then checks a word is present.",
+      "prompt": "Write <code>extract_numbers(text)</code> that returns a list of all the whole numbers (as strings) found in the text, using <code>re.findall</code>.",
+      "starter": "import re\n\ndef extract_numbers(text):\n    # return re.findall(r'...', text)\n    pass\n",
+      "solution": "import re\n\ndef extract_numbers(text):\n    return re.findall(r'\\d+', text)",
+      "hints": [
+        "re.findall(pattern, text) returns a list of matches.",
+        "\\d+ matches one or more digits.",
+        "return re.findall(r'\\d+', text)"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "extract_numbers('Order 12 has 3 items costing 450')",
+            "visible": true
+          },
+          {
+            "expr": "extract_numbers('no digits here')",
+            "visible": false
+          },
+          {
+            "expr": "extract_numbers('abc 007 x9')",
+            "visible": false
+          },
+          {
+            "expr": "extract_numbers('')",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "re."
+        ]
+      },
+      "xp": 20
+    }
+  ]
+}

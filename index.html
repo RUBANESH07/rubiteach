@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rubitech Academy – Learn technology by doing</title>
+<meta name="description" content="Learn SQL, Python, JavaScript and more by writing real code. Short lessons, a built-in code editor, instant feedback and XP.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css?v=5">
+</head>
+<body>
+<header class="nav">
+  <div class="container">
+    <a class="logo" href="index.html"><img class="logo-mark" src="assets/logo/rubitech-mark.svg" alt="" width="36" height="36"><span class="logo-text">Rubitech<small>ACADEMY</small></span></a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#features">Features</a><a href="#how">How it works</a><a href="#courses">Courses</a>
+    </nav>
+    <a class="btn sm" href="app.html">Start learning</a>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="container">
+    <div>
+      <span class="pill">✨ SQL, Python, JavaScript &amp; more</span>
+      <h1 class="display">Learn tech by <span>writing real code</span></h1>
+      <p class="lead">Short lessons, a built-in code editor, instant feedback and XP for every skill you unlock. Learn SQL, Python, JavaScript, HTML &amp; CSS, Git and more, one small task at a time.</p>
+      <div class="cta">
+        <a class="btn lg" href="app.html">Start learning free →</a>
+        <a class="btn lg secondary" href="app.html#/playground">Open playground</a>
+      </div>
+      <div class="trust"><span><b>2</b> courses live</span><span><b>130</b> coding tasks</span><span><b>8</b> badges</span><span><b>0</b> setup</span></div>
+    </div>
+    <div class="mock" aria-hidden="true">
+      <div class="mock-bar"><span></span><span></span><span></span></div>
+<pre><span class="cm"># Python · Functions</span>
+<span class="kw">def</span> <span class="fn">total_bill</span>(prices, tax=<span class="str">0.1</span>):
+    <span class="kw">return</span> <span class="fn">round</span>(<span class="fn">sum</span>(prices) * (<span class="str">1</span> + tax), <span class="str">2</span>)
+
+<span class="fn">print</span>(total_bill([<span class="str">250</span>, <span class="str">99.5</span>, <span class="str">40</span>]))</pre>
+      <div class="mock-out"><table><tr><th>Test</th><th>Expected</th><th>Your output</th></tr>
+        <tr><td>1 · visible</td><td>428.45</td><td>428.45</td></tr><tr><td>2 · hidden</td><td>–</td><td>passed</td></tr><tr><td>3 · hidden</td><td>–</td><td>passed</td></tr></table></div>
+      <div class="mock-ok">✓ Correct! +15 XP</div>
+    </div>
+  </div>
+</section>
+
+<section class="block" style="padding:28px 0 0">
+  <div class="container"><p class="center" style="margin:0;color:var(--muted);font-weight:600">Learn: <span style="color:var(--brand)">SQL, Python, JavaScript, HTML &amp; CSS, Git, Linux</span></p></div>
+</section>
+
+<section class="block" id="features">
+  <div class="container">
+    <div class="center"><span class="eyebrow">Why it works</span>
+      <h2 class="title">Learn by doing, not by watching</h2>
+      <p class="sub">Every lesson follows the same proven loop, in every technology, so concepts actually stick.</p></div>
+    <div class="grid3">
+      <div class="card"><div class="ico">💡</div><h3>Plain-English lessons</h3><p>What it is, why it matters and a real example – no jargon, no walls of text.</p></div>
+      <div class="card"><div class="ico">⌨️</div><h3>Real code editor</h3><p>Write, run and fix real code for each course, right in your browser. Nothing to install.</p></div>
+      <div class="card"><div class="ico">✅</div><h3>Instant, fair grading</h3><p>Your code is tested on the server with hidden test cases, and you get clear hints when you are stuck.</p></div>
+      <div class="card"><div class="ico">🏅</div><h3>XP, streaks &amp; badges</h3><p>Earn XP once per task, keep a daily streak and unlock achievements as you grow.</p></div>
+      <div class="card"><div class="ico">🧪</div><h3>Free playground</h3><p>Experiment with any code or query and reset in one click. Practice never costs XP.</p></div>
+      <div class="card"><div class="ico">🗺️</div><h3>Guided paths</h3><p>Courses are split into levels, so you always know exactly what to learn next.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block alt" id="how">
+  <div class="container">
+    <div class="center"><span class="eyebrow">How it works</span><h2 class="title">Four steps in every lesson</h2></div>
+    <div class="steps">
+      <div class="step"><h4>Learn</h4><p>Read the concept and why it is useful.</p></div>
+      <div class="step"><h4>See</h4><p>Run a worked example and watch the output.</p></div>
+      <div class="step"><h4>Practice</h4><p>Solve a task in the built-in editor.</p></div>
+      <div class="step"><h4>Earn</h4><p>Get feedback, collect XP, unlock the next lesson.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="courses">
+  <div class="container">
+    <div class="center"><span class="eyebrow">Courses</span><h2 class="title">Pick a technology and start</h2>
+      <p class="sub">Two courses are live today. JavaScript, HTML &amp; CSS, Git and Linux are on the way.</p></div>
+    <div class="road" style="grid-template-columns:repeat(2,1fr)">
+      <div class="card"><span class="tag">Live · 17 lessons</span><h3 style="margin-top:12px">🗄️ SQL</h3>
+        <p style="margin-top:6px">Query real data with a company database.</p>
+        <ul><li>SELECT, WHERE, ORDER BY, LIMIT</li><li>COUNT, SUM, AVG, GROUP BY, HAVING</li><li>JOINs, subqueries, CASE, CTEs, window functions</li><li>INSERT, UPDATE, DELETE</li></ul></div>
+      <div class="card"><span class="tag">Live · 113 tasks · 8 levels</span><h3 style="margin-top:12px">🐍 Python</h3>
+        <p style="margin-top:6px">From your first print() to algorithms.</p>
+        <ul><li>Basics: variables, types, operators, input and output</li><li>Conditions, loops, strings, lists, dictionaries</li><li>Functions, comprehensions, files, JSON, CSV, regex</li><li>OOP, decorators, generators, async, data structures, algorithms</li></ul></div>
+    </div>
+    <div class="road" style="margin-top:20px">
+      <div class="card" style="border-style:dashed"><span class="tag" style="background:#FFF4E5;color:#9A4A00">Coming soon</span><h3 style="margin-top:12px">🟨 JavaScript</h3><ul><li>Web basics, DOM, events</li></ul></div>
+      <div class="card" style="border-style:dashed"><span class="tag" style="background:#FFF4E5;color:#9A4A00">Coming soon</span><h3 style="margin-top:12px">🎨 HTML &amp; CSS</h3><ul><li>Pages, layout, responsive design</li></ul></div>
+      <div class="card" style="border-style:dashed"><span class="tag" style="background:#FFF4E5;color:#9A4A00">Coming soon</span><h3 style="margin-top:12px">🌿 Git, Linux &amp; APIs</h3><ul><li>Version control, the terminal, REST</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" style="padding-top:0">
+  <div class="container"><div class="band"><h2>Write your first line of code in 60 seconds</h2><p>No setup. Create a free account and your progress is saved.</p><a class="btn lg" href="app.html">Start for free →</a></div></div>
+</section>
+</main>
+
+<footer><div class="container"><span>© 2026 Rubitech Academy</span><span>SQL, Python, JavaScript, HTML &amp; CSS, Git, Linux</span></div></footer>
+</body>
+</html>

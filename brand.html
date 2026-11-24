@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rubitech Academy – Brand guide</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css?v=5">
+<style>
+  .bg{padding:48px 0}.sec2{margin:0 0 56px}
+  .sec2 h2{font-size:26px;letter-spacing:-.02em;margin:0 0 6px}.sec2>p{color:var(--muted);margin:0 0 20px;max-width:640px}
+  .tile{border-radius:20px;display:grid;place-items:center;padding:40px;border:1px solid var(--line)}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .sw{border-radius:16px;padding:20px;min-height:130px;display:flex;flex-direction:column;justify-content:flex-end;font-weight:700}
+  .sw small{font-weight:500;opacity:.85;font-family:ui-monospace,Consolas,monospace}
+  .sizes{display:flex;gap:28px;align-items:flex-end;flex-wrap:wrap}.sizes figure{margin:0;text-align:center;font-size:12px;color:var(--muted)}
+  .rules li{margin-bottom:8px;color:#4A2E46}
+  .clear{position:relative;display:inline-block;padding:32px;border:1.5px dashed var(--accent);border-radius:16px}
+  .clear::after{content:"x";position:absolute;top:6px;left:50%;transform:translateX(-50%);font:700 12px ui-monospace,Consolas,monospace;color:var(--accent-600)}
+  @media(max-width:700px){.g2,.g3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container bg">
+  <span class="pill">Brand guide · v1.0</span>
+  <h1 class="display" style="font-size:44px;margin:14px 0 8px">Rubitech Academy logo</h1>
+  <p class="lead" style="margin-bottom:40px">The RT monogram joins the <b>R</b> and <b>T</b> with one shared top bar, a single continuous line that reads as a line of code. The coral leg is the only accent, the spark that sets the mark apart.</p>
+
+  <section class="sec2"><h2>Primary mark</h2><p>Use the badge wherever space is tight: app icon, favicon, avatars, social.</p>
+    <div class="g3">
+      <div class="tile" style="background:#fff"><img src="assets/logo/rubitech-mark.svg" width="150" height="150" alt="Rubitech RT mark"></div>
+      <div class="tile" style="background:var(--brand)"><img src="assets/logo/rubitech-mark.svg" width="150" height="150" alt="Rubitech RT mark on plum" style="outline:2px solid rgba(255,241,237,.25);border-radius:42px"></div>
+      <div class="tile" style="background:var(--bg)"><img src="assets/logo/rubitech-mark.svg" width="150" height="150" alt="Rubitech RT mark on blush"></div>
+    </div></section>
+
+  <section class="sec2"><h2>Lockups</h2><p>Horizontal lockup for headers and documents. Use the reverse version on plum or other dark backgrounds.</p>
+    <div class="g2">
+      <div class="tile" style="background:#fff"><img src="assets/logo/rubitech-logo.svg" width="320" alt="Rubitech Academy logo"></div>
+      <div class="tile" style="background:var(--brand);border-color:var(--brand)"><img src="assets/logo/rubitech-logo-reverse.svg" width="320" alt="Rubitech Academy logo, reverse"></div>
+    </div></section>
+
+  <section class="sec2"><h2>One colour</h2><p>For stamps, print and single-ink uses. The mark takes the colour of its container.</p>
+    <div class="g3">
+      <div class="tile" style="background:#fff;color:var(--brand)"><img src="assets/logo/rubitech-mark-mono.svg" width="110" alt="" style="filter:invert(14%) sepia(45%) saturate(1500%) hue-rotate(260deg)"></div>
+      <div class="tile" style="background:var(--brand-600)"><img src="assets/logo/rubitech-mark-mono.svg" width="110" alt="" style="filter:brightness(0) invert(1)"></div>
+      <div class="tile" style="background:#111"><img src="assets/logo/rubitech-mark-mono.svg" width="110" alt="" style="filter:brightness(0) invert(1)"></div>
+    </div></section>
+
+  <section class="sec2"><h2>Sizes &amp; clear space</h2><p>Keep clear space equal to the width of the T stem (x) on every side. Minimum size: 16 px for the badge, 120 px wide for the lockup.</p>
+    <div class="sizes">
+      <figure><img src="assets/logo/rubitech-mark.svg" width="128" alt=""><br>128</figure><figure><img src="assets/logo/rubitech-mark.svg" width="64" alt=""><br>64</figure>
+      <figure><img src="assets/logo/rubitech-mark.svg" width="32" alt=""><br>32</figure><figure><img src="assets/logo/rubitech-mark.svg" width="16" alt=""><br>16 (favicon)</figure>
+      <div class="clear"><img src="assets/logo/rubitech-logo.svg" width="240" alt=""></div>
+    </div></section>
+
+  <section class="sec2"><h2>Colour</h2><p>Warm plum with a coral spark on a blush canvas.</p>
+    <div class="g3" style="grid-template-columns:repeat(4,1fr)">
+      <div class="sw" style="background:#4A1942;color:#fff">Primary<small>#4A1942</small></div>
+      <div class="sw" style="background:#8B3A62;color:#fff">Secondary<small>#8B3A62</small></div>
+      <div class="sw" style="background:#FF8066;color:#2A0F27">Accent<small>#FF8066</small></div>
+      <div class="sw" style="background:#FFF1ED;color:#2A0F27;border:1px solid var(--line)">Background<small>#FFF1ED</small></div>
+    </div></section>
+
+  <section class="sec2"><h2>Do and don't</h2>
+    <ul class="rules">
+      <li>✅ Use the supplied SVG files; never redraw the letters.</li>
+      <li>✅ Keep the leg coral on plum and cream badges. In one-colour use the leg takes the same colour.</li>
+      <li>❌ Don't stretch, rotate, outline or add shadows to the mark.</li>
+      <li>❌ Don't recolour the badge outside the palette above.</li>
+      <li>❌ Don't set coral text on cream at small sizes; it fails contrast. Use plum.</li>
+    </ul></section>
+</div>
+</body>
+</html>

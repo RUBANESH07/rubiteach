@@ -1,0 +1,547 @@
+{
+  "title": "Level 4 · Functions",
+  "blurb": "Write reusable functions: parameters, return values, lambdas, recursion, scope and the map, filter and reduce tools.",
+  "lessons": [
+    {
+      "title": "Functions (def, calling)",
+      "concept": "A <b>function</b> is a named block of code you write once and run whenever you need it. Create one with <code>def</code>, a name, brackets and a colon; the indented lines below are its body. Nothing runs until you <b>call</b> the function by writing its name with brackets, like <code>greet()</code>.",
+      "why": "Functions stop you repeating code: a shop app has one <code>print_bill()</code> that every checkout uses.",
+      "example": "def welcome(name):\n    print('Welcome,', name)\n\nwelcome('Asha')\nwelcome('Ravi')",
+      "example_note": "Defines a function once and calls it twice with different names.",
+      "prompt": "Define a function <code>greet(name)</code> that prints <code>Hello, NAME!</code>. Then read a name from input and call <code>greet</code> with it. Example: <code>Asha</code> prints <code>Hello, Asha!</code>",
+      "starter": "def greet(name):\n    # print the greeting here\n    pass\n\nname = input()\n# call greet with name\n",
+      "solution": "def greet(name):\n    print(f'Hello, {name}!')\n\nname = input()\ngreet(name)",
+      "hints": [
+        "Inside the function use print().",
+        "An f-string helps: f'Hello, {name}!'",
+        "After the def, write greet(name) on its own line."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "stdin": "Asha\n"
+          },
+          {
+            "stdin": "Ravi Kumar\n",
+            "visible": false
+          },
+          {
+            "stdin": "Z\n",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "def "
+        ]
+      },
+      "minutes": 5,
+      "xp": 15
+    },
+    {
+      "title": "Parameters (positional and keyword)",
+      "concept": "<b>Parameters</b> are the names in the brackets of a <code>def</code>; the values you pass are <b>arguments</b>. <b>Positional</b> arguments match by order: <code>bill(50, 3)</code>. <b>Keyword</b> arguments match by name, so order does not matter: <code>bill(quantity=3, price=50)</code>.",
+      "why": "Keyword arguments make calls readable, like <code>send_email(to='a@b.com', subject='Hi')</code>.",
+      "example": "def intro(name, city):\n    return name + ' lives in ' + city\n\nprint(intro('Asha', 'Pune'))\nprint(intro(city='Delhi', name='Ravi'))",
+      "example_note": "Calls the same function by position and by keyword.",
+      "prompt": "Write a function <code>bill(price, quantity)</code> that returns the total cost (<code>price * quantity</code>). The tests call it both by position and by keyword.",
+      "starter": "def bill(price, quantity):\n    # return the total\n    pass\n",
+      "solution": "def bill(price, quantity):\n    return price * quantity",
+      "hints": [
+        "The function must return a value, not print it.",
+        "Multiply the two parameters.",
+        "return price * quantity"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "bill(50, 3)",
+            "visible": true
+          },
+          {
+            "expr": "bill(quantity=2, price=10)",
+            "visible": false
+          },
+          {
+            "expr": "bill(0, 5)",
+            "visible": false
+          },
+          {
+            "expr": "bill(price=12.5, quantity=4)",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "def "
+        ]
+      },
+      "minutes": 5,
+      "xp": 15
+    },
+    {
+      "title": "Default Arguments",
+      "concept": "Give a parameter a <b>default value</b> with <code>=</code> in the <code>def</code>: <code>def f(x, rate=0.1)</code>. If the caller leaves that argument out, the default is used; if they pass one, it replaces the default. Parameters with defaults go after those without.",
+      "why": "Defaults keep common calls short: <code>open('file.txt')</code> works without telling Python the mode.",
+      "example": "def hello(name, greeting='Hello'):\n    print(greeting, name)\n\nhello('Asha')\nhello('Ravi', 'Namaste')",
+      "example_note": "Uses the default greeting once and overrides it once.",
+      "prompt": "Write <code>price_with_tax(price, rate=0.18)</code> that returns the price plus tax, rounded to 2 decimals: <code>round(price * (1 + rate), 2)</code>.",
+      "starter": "def price_with_tax(price, rate=0.18):\n    # return price plus tax, rounded to 2 decimals\n    pass\n",
+      "solution": "def price_with_tax(price, rate=0.18):\n    return round(price * (1 + rate), 2)",
+      "hints": [
+        "The default rate is already in the def line.",
+        "Use round(value, 2).",
+        "return round(price * (1 + rate), 2)"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "price_with_tax(100)",
+            "visible": true
+          },
+          {
+            "expr": "price_with_tax(200, 0.05)",
+            "visible": false
+          },
+          {
+            "expr": "price_with_tax(0)",
+            "visible": false
+          },
+          {
+            "expr": "price_with_tax(99.99, rate=0)",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "def ",
+          "rate=0.18"
+        ]
+      },
+      "minutes": 5,
+      "xp": 15
+    },
+    {
+      "title": "Return",
+      "concept": "<code>return</code> sends a value back to whoever called the function and ends it immediately. Without <code>return</code> a function gives back <code>None</code>. You can return several values separated by commas; Python packs them into a <b>tuple</b>.",
+      "why": "Returned values can be stored, compared or passed to other functions, which printing alone cannot do.",
+      "example": "def add(a, b):\n    return a + b\n\nresult = add(2, 3)\nprint(result * 10)",
+      "example_note": "Stores the returned value and uses it in more maths.",
+      "prompt": "Write <code>min_max(numbers)</code> that returns the smallest and the largest number from a list as two values (a tuple).",
+      "starter": "def min_max(numbers):\n    # return the smallest and largest values\n    pass\n",
+      "solution": "def min_max(numbers):\n    return min(numbers), max(numbers)",
+      "hints": [
+        "Python has built-in min() and max().",
+        "Return two values separated by a comma.",
+        "return min(numbers), max(numbers)"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "min_max([4, 9, 1])",
+            "visible": true
+          },
+          {
+            "expr": "min_max([7])",
+            "visible": false
+          },
+          {
+            "expr": "min_max([-5, 0, 5, 10])",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "return"
+        ]
+      },
+      "minutes": 5,
+      "xp": 15
+    },
+    {
+      "title": "*args",
+      "concept": "Put <code>*args</code> in a <code>def</code> to accept <b>any number</b> of positional arguments. Inside the function <code>args</code> is a tuple holding everything passed, so you can loop over it or use <code>sum(args)</code>. The name <code>args</code> is just a habit; the star is what matters.",
+      "why": "Functions like <code>print()</code> accept as many values as you like; <code>*args</code> is how you build that.",
+      "example": "def show_all(*args):\n    print(len(args), 'items:', args)\n\nshow_all('a')\nshow_all(1, 2, 3)",
+      "example_note": "The same function handles one argument or three.",
+      "prompt": "Write <code>total(*args)</code> that returns the sum of all numbers passed in. With no arguments it returns <code>0</code>.",
+      "starter": "def total(*args):\n    # return the sum of args\n    pass\n",
+      "solution": "def total(*args):\n    return sum(args)",
+      "hints": [
+        "args is a tuple of all the numbers.",
+        "sum() adds up a tuple.",
+        "return sum(args)"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "total(1, 2, 3)",
+            "visible": true
+          },
+          {
+            "expr": "total()",
+            "visible": false
+          },
+          {
+            "expr": "total(5)",
+            "visible": false
+          },
+          {
+            "expr": "total(10, 20.5, 30)",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "*args"
+        ]
+      },
+      "minutes": 5,
+      "xp": 15
+    },
+    {
+      "title": "**kwargs",
+      "concept": "Put <code>**kwargs</code> in a <code>def</code> to accept any number of <b>keyword</b> arguments. Inside the function <code>kwargs</code> is a dictionary: names are keys, values are values. Loop with <code>kwargs.items()</code>.",
+      "why": "Settings, form fields and options are often passed as named extras, e.g. <code>create_user(name='Asha', age=20)</code>.",
+      "example": "def show(**kwargs):\n    for key, value in kwargs.items():\n        print(key, '=', value)\n\nshow(name='Asha', age=20)",
+      "example_note": "Prints every keyword argument passed in.",
+      "prompt": "Write <code>describe(**kwargs)</code> that returns the pairs as <code>key=value</code> text joined by <code>', '</code>, sorted by key. <code>describe(name='Asha', age=20)</code> returns <code>'age=20, name=Asha'</code>.",
+      "starter": "def describe(**kwargs):\n    # build 'key=value' pieces sorted by key and join them\n    pass\n",
+      "solution": "def describe(**kwargs):\n    parts = [f'{key}={kwargs[key]}' for key in sorted(kwargs)]\n    return ', '.join(parts)",
+      "hints": [
+        "sorted(kwargs) gives the keys in order.",
+        "Build a list of 'key=value' strings, then use ', '.join(list).",
+        "parts = [f'{k}={kwargs[k]}' for k in sorted(kwargs)]; return ', '.join(parts)"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "describe(name='Asha', age=20)",
+            "visible": true
+          },
+          {
+            "expr": "describe()",
+            "visible": false
+          },
+          {
+            "expr": "describe(city='Pune')",
+            "visible": false
+          },
+          {
+            "expr": "describe(b=2, a=1, c=3)",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "**kwargs"
+        ]
+      },
+      "minutes": 5,
+      "xp": 15
+    },
+    {
+      "title": "Lambda",
+      "concept": "A <b>lambda</b> is a tiny nameless function written on one line: <code>lambda x: x * 2</code>. The part before the colon is the parameters, the part after is the value it returns (no <code>return</code> word). You can store it in a variable and call it like any function.",
+      "why": "Lambdas are handy for quick one-off rules, such as telling <code>sorted()</code> how to order items.",
+      "example": "double = lambda x: x * 2\nadd = lambda a, b: a + b\nprint(double(7))\nprint(add(3, 4))",
+      "example_note": "Two lambdas stored in variables and called.",
+      "prompt": "Create a lambda stored in <code>add_gst</code> that takes a <code>price</code> and returns it plus 18% GST, rounded to 2 decimals.",
+      "starter": "# add_gst = lambda price: ...\nadd_gst = None\n",
+      "solution": "add_gst = lambda price: round(price * 1.18, 2)",
+      "hints": [
+        "Write lambda price: followed by the calculation.",
+        "price * 1.18 adds 18%.",
+        "add_gst = lambda price: round(price * 1.18, 2)"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "add_gst(100)",
+            "visible": true
+          },
+          {
+            "expr": "add_gst(0)",
+            "visible": false
+          },
+          {
+            "expr": "add_gst(250.5)",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "lambda"
+        ]
+      },
+      "minutes": 5,
+      "xp": 15
+    },
+    {
+      "title": "Recursion",
+      "minutes": 7,
+      "concept": "A <b>recursive</b> function calls itself on a smaller problem. It needs a <b>base case</b> that stops the calls, otherwise it never ends. For example <code>5! = 5 * 4!</code> and <code>0! = 1</code> is the base case.",
+      "why": "Recursion fits naturally with nested things: folders inside folders, menus inside menus, family trees.",
+      "example": "def countdown(n):\n    if n == 0:\n        print('Go!')\n        return\n    print(n)\n    countdown(n - 1)\n\ncountdown(3)",
+      "example_note": "Prints 3, 2, 1 then Go! by calling itself with n - 1.",
+      "prompt": "Write <code>factorial(n)</code> using recursion (no loops). <code>factorial(5)</code> is <code>120</code> and <code>factorial(0)</code> is <code>1</code>.",
+      "starter": "def factorial(n):\n    # base case first, then call factorial(n - 1)\n    pass\n",
+      "solution": "def factorial(n):\n    if n <= 1:\n        return 1\n    return n * factorial(n - 1)",
+      "hints": [
+        "Base case: if n is 0 or 1, return 1.",
+        "Otherwise return n times the factorial of n - 1.",
+        "return n * factorial(n - 1)"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "factorial(5)",
+            "visible": true
+          },
+          {
+            "expr": "factorial(0)",
+            "visible": false
+          },
+          {
+            "expr": "factorial(1)",
+            "visible": false
+          },
+          {
+            "expr": "factorial(10)",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "factorial("
+        ],
+        "forbid": [
+          "for ",
+          "while",
+          "math"
+        ]
+      },
+      "xp": 15
+    },
+    {
+      "title": "Scope (local, global, nonlocal)",
+      "minutes": 7,
+      "concept": "A variable made inside a function is <b>local</b>: it exists only there. A variable made outside is <b>global</b> and can be read anywhere, but to <i>change</i> it inside a function you must write <code>global name</code> first. <code>nonlocal</code> does the same for a variable of an enclosing function.",
+      "why": "Understanding scope explains why a variable 'disappears' or why a function cannot update your counter.",
+      "example": "count = 0\n\ndef add_one():\n    global count\n    count += 1\n\nadd_one()\nadd_one()\nprint(count)",
+      "example_note": "Without 'global', the function could not change count; this prints 2.",
+      "prompt": "The global <code>total</code> starts at 0. Write <code>add_to_total(amount)</code> that adds <code>amount</code> to the global <code>total</code> and returns the new total.",
+      "starter": "total = 0\n\ndef add_to_total(amount):\n    # use global, add amount, return the new total\n    pass\n",
+      "solution": "total = 0\n\ndef add_to_total(amount):\n    global total\n    total += amount\n    return total",
+      "hints": [
+        "Start the function body with: global total",
+        "Then total += amount.",
+        "global total / total += amount / return total"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "[add_to_total(5), add_to_total(10)]",
+            "visible": true
+          },
+          {
+            "expr": "[add_to_total(0)]",
+            "visible": false
+          },
+          {
+            "expr": "[add_to_total(3), add_to_total(4), add_to_total(5)]",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "global"
+        ]
+      },
+      "xp": 15
+    },
+    {
+      "title": "Nested Functions",
+      "minutes": 7,
+      "concept": "You can define a function <b>inside</b> another one. The inner function can use the outer function's variables, and if the outer function returns the inner one, it still remembers those variables (a <b>closure</b>). Use <code>nonlocal</code> in the inner function to change an outer variable.",
+      "why": "Closures let you build custom tools, like a counter or a 'discount maker', each with its own private memory.",
+      "example": "def make_multiplier(n):\n    def multiply(x):\n        return x * n\n    return multiply\n\ntriple = make_multiplier(3)\nprint(triple(5))",
+      "example_note": "The inner function remembers n = 3 and prints 15.",
+      "prompt": "Write <code>make_counter()</code> that returns a function. Each time that function is called it returns the next number: <code>1</code>, then <code>2</code>, then <code>3</code>... Use an inner function and <code>nonlocal</code>.",
+      "starter": "def make_counter():\n    count = 0\n    # define an inner function that uses nonlocal, then return it\n",
+      "solution": "def make_counter():\n    count = 0\n    def counter():\n        nonlocal count\n        count += 1\n        return count\n    return counter",
+      "hints": [
+        "Define def counter(): inside make_counter.",
+        "Inside counter write nonlocal count, then add 1 and return it.",
+        "Finish with return counter (no brackets) in make_counter."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "(lambda c: [c(), c(), c()])(make_counter())",
+            "visible": true
+          },
+          {
+            "expr": "(lambda c: [c()])(make_counter())",
+            "visible": false
+          },
+          {
+            "expr": "(lambda a, b: [a(), a(), b()])(make_counter(), make_counter())",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "nonlocal"
+        ]
+      },
+      "xp": 15
+    },
+    {
+      "title": "Higher-Order Functions",
+      "concept": "In Python a function is a value, so you can pass it to another function or return it. A <b>higher-order function</b> is one that takes a function as an argument (or returns one). Pass the function's name <i>without</i> brackets: <code>apply(double, 5)</code>.",
+      "why": "Sorting, filtering and event handlers all work by handing a function to other code.",
+      "example": "def apply(func, value):\n    return func(value)\n\nprint(apply(len, 'python'))\nprint(apply(abs, -9))",
+      "example_note": "The same apply works with any function you give it.",
+      "prompt": "Write <code>apply_twice(func, value)</code> that calls <code>func</code> on <code>value</code>, then calls <code>func</code> again on that result, and returns it.",
+      "starter": "def apply_twice(func, value):\n    # call func two times\n    pass\n",
+      "solution": "def apply_twice(func, value):\n    return func(func(value))",
+      "hints": [
+        "func is a function you can call: func(value).",
+        "The second call uses the first result.",
+        "return func(func(value))"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "apply_twice(lambda x: x + 3, 10)",
+            "visible": true
+          },
+          {
+            "expr": "apply_twice(str.upper, 'ab')",
+            "visible": false
+          },
+          {
+            "expr": "apply_twice(lambda s: s + '!', 'hi')",
+            "visible": false
+          },
+          {
+            "expr": "apply_twice(abs, -4)",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "func("
+        ]
+      },
+      "minutes": 5,
+      "xp": 15
+    },
+    {
+      "title": "Map (map())",
+      "concept": "<code>map(function, items)</code> applies a function to every item and gives back the results. It returns a lazy <b>map object</b>, so wrap it in <code>list()</code> to see the values: <code>list(map(len, ['a', 'bb']))</code> is <code>[1, 2]</code>.",
+      "why": "Converting a whole column of data (prices to rupees, text to numbers) is a classic map job.",
+      "example": "names = ['asha', 'ravi']\nprint(list(map(str.upper, names)))\nprint(list(map(lambda x: x * 2, [1, 2, 3])))",
+      "example_note": "Upper-cases every name and doubles every number.",
+      "prompt": "Write <code>to_fahrenheit(celsius_list)</code> that uses <code>map()</code> to convert each Celsius value with <code>c * 9 / 5 + 32</code>, rounded to 1 decimal, and returns a list.",
+      "starter": "def to_fahrenheit(celsius_list):\n    # use map() with a lambda, wrap in list()\n    pass\n",
+      "solution": "def to_fahrenheit(celsius_list):\n    return list(map(lambda c: round(c * 9 / 5 + 32, 1), celsius_list))",
+      "hints": [
+        "map(function, celsius_list) needs a function; a lambda works.",
+        "Wrap the map in list().",
+        "list(map(lambda c: round(c * 9 / 5 + 32, 1), celsius_list))"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "to_fahrenheit([0, 100, 37])",
+            "visible": true
+          },
+          {
+            "expr": "to_fahrenheit([])",
+            "visible": false
+          },
+          {
+            "expr": "to_fahrenheit([-40])",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "map("
+        ]
+      },
+      "minutes": 5,
+      "xp": 15
+    },
+    {
+      "title": "Filter (filter())",
+      "concept": "<code>filter(function, items)</code> keeps only the items for which the function returns <code>True</code>. Like <code>map</code> it is lazy, so wrap it in <code>list()</code>: <code>list(filter(lambda n: n &gt; 2, [1, 5, 3]))</code> is <code>[5, 3]</code>.",
+      "why": "Picking out passing students, in-stock products or valid emails is a filter job.",
+      "example": "nums = [1, 2, 3, 4, 5, 6]\nprint(list(filter(lambda n: n % 2 == 0, nums)))",
+      "example_note": "Keeps only the even numbers.",
+      "prompt": "Write <code>passed(marks)</code> that uses <code>filter()</code> to return a list of the marks that are <code>40</code> or more.",
+      "starter": "def passed(marks):\n    # use filter() with a lambda, wrap in list()\n    pass\n",
+      "solution": "def passed(marks):\n    return list(filter(lambda m: m >= 40, marks))",
+      "hints": [
+        "The lambda must return True for marks you want to keep.",
+        "lambda m: m >= 40",
+        "list(filter(lambda m: m >= 40, marks))"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "passed([35, 80, 40, 12, 99])",
+            "visible": true
+          },
+          {
+            "expr": "passed([])",
+            "visible": false
+          },
+          {
+            "expr": "passed([10, 20])",
+            "visible": false
+          },
+          {
+            "expr": "passed([40])",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "filter("
+        ]
+      },
+      "minutes": 5,
+      "xp": 15
+    },
+    {
+      "title": "Reduce (functools.reduce())",
+      "minutes": 6,
+      "concept": "<code>reduce(function, items, start)</code> from the <code>functools</code> module combines a list into <b>one</b> value. The function takes the running result and the next item. For example <code>reduce(lambda a, b: a + b, [1, 2, 3], 0)</code> gives <code>6</code>. The third argument is the starting value.",
+      "why": "Totals, products and 'longest word' style summaries are all reductions of a list into a single answer.",
+      "example": "from functools import reduce\n\nnums = [1, 2, 3, 4]\nprint(reduce(lambda a, b: a + b, nums, 0))",
+      "example_note": "Adds the numbers step by step and prints 10.",
+      "prompt": "Write <code>product(numbers)</code> that uses <code>reduce</code> to multiply all the numbers together. An empty list gives <code>1</code>.",
+      "starter": "from functools import reduce\n\ndef product(numbers):\n    # reduce with a lambda and a start value of 1\n    pass\n",
+      "solution": "from functools import reduce\n\ndef product(numbers):\n    return reduce(lambda a, b: a * b, numbers, 1)",
+      "hints": [
+        "The lambda takes two values: lambda a, b: ...",
+        "Start from 1 so an empty list works.",
+        "reduce(lambda a, b: a * b, numbers, 1)"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "product([2, 3, 4])",
+            "visible": true
+          },
+          {
+            "expr": "product([])",
+            "visible": false
+          },
+          {
+            "expr": "product([7])",
+            "visible": false
+          },
+          {
+            "expr": "product([5, 0, 9])",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "reduce("
+        ]
+      },
+      "xp": 15
+    }
+  ]
+}

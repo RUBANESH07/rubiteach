@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Rubitech Academy">
+  <defs>
+    <linearGradient id="rt-bg" x1="6" y1="4" x2="58" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4A1942"/>
+      <stop offset="1" stop-color="#8B3A62"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="18" fill="url(#rt-bg)"/>
+  <!-- RT ligature: the R and the T share one continuous top bar -->
+  <g transform="translate(-3 0)" fill="none" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17 47V17H53" stroke="#FFF1ED"/>
+    <path d="M30 17a7 7 0 0 1 0 14H17" stroke="#FFF1ED"/>
+    <path d="M47 20V47" stroke="#FFF1ED"/>
+    <!-- coral leg = the brand accent -->
+    <path d="M26 32L35 47" stroke="#FF8066"/>
+  </g>
+</svg>

@@ -1,0 +1,10 @@
+{
+  "slug": "python",
+  "title": "Python",
+  "icon": "🐍",
+  "runtime": "python",
+  "position": 2,
+  "unlock_mode": "by_module",
+  "published": true,
+  "description": "From your first print() to algorithms: 8 levels, 113 hands-on coding tasks graded instantly."
+}

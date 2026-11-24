@@ -1,0 +1,668 @@
+{
+  "title": "Level 7 · Advanced Python Coding",
+  "blurb": "Iterators, generators, decorators, concurrency and the advanced tools professional Python developers use.",
+  "lessons": [
+    {
+      "title": "Iterators",
+      "concept": "An <b>iterator</b> is an object that hands out values one at a time. <code>iter(x)</code> gives you one and <code>next(it)</code> asks for the next value, raising <code>StopIteration</code> when it runs out. Your own class becomes an iterator by defining <code>__iter__</code> (return <code>self</code>) and <code>__next__</code>.",
+      "why": "Every <code>for</code> loop uses iterators behind the scenes, and custom ones let you walk through huge data without loading it all at once.",
+      "example": "it = iter([10, 20])\nprint(next(it))\nprint(next(it))\ntry:\n    next(it)\nexcept StopIteration:\n    print('done')",
+      "example_note": "Pulls two values by hand, then catches the end signal.",
+      "prompt": "Write a class <code>Countdown</code> whose constructor takes <code>n</code>. Looping over it must give <code>n, n-1, ... , 1</code>. Define <code>__iter__</code> and <code>__next__</code> (raise <code>StopIteration</code> when finished).",
+      "starter": "class Countdown:\n    def __init__(self, n):\n        self.current = n\n\n    # add __iter__ and __next__\n",
+      "solution": "class Countdown:\n    def __init__(self, n):\n        self.current = n\n\n    def __iter__(self):\n        return self\n\n    def __next__(self):\n        if self.current <= 0:\n            raise StopIteration\n        value = self.current\n        self.current -= 1\n        return value",
+      "hints": [
+        "__iter__ just returns self.",
+        "In __next__, stop with raise StopIteration when current is 0 or less.",
+        "Save current in a variable, subtract 1 from self.current, then return the saved value."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "list(Countdown(3))"
+          },
+          {
+            "expr": "list(Countdown(0))",
+            "visible": false
+          },
+          {
+            "expr": "list(Countdown(5))",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "__iter__",
+          "__next__",
+          "StopIteration"
+        ]
+      },
+      "minutes": 7,
+      "xp": 25
+    },
+    {
+      "title": "Generators",
+      "concept": "A <b>generator</b> is a function that uses <code>yield</code> instead of <code>return</code>. Each <code>yield</code> pauses the function and hands out a value; the next request resumes where it stopped. <code>yield from other</code> hands out everything from another iterable.",
+      "why": "Generators read big files line by line or produce endless streams while using almost no memory.",
+      "example": "def count_up(n):\n    for i in range(1, n + 1):\n        yield i\n\ndef both():\n    yield from count_up(2)\n    yield from 'ab'\n\nprint(list(both()))",
+      "example_note": "Prints [1, 2, 'a', 'b'] by chaining generators with yield from.",
+      "prompt": "Write a generator function <code>evens(limit)</code> that yields every even number from <code>0</code> up to and including <code>limit</code>.",
+      "starter": "def evens(limit):\n    # use yield inside a loop\n    pass\n",
+      "solution": "def evens(limit):\n    for n in range(0, limit + 1, 2):\n        yield n",
+      "hints": [
+        "Loop with range and use yield, not return.",
+        "range(0, limit + 1, 2) steps by 2.",
+        "for n in range(0, limit + 1, 2): yield n"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "list(evens(6))"
+          },
+          {
+            "expr": "list(evens(7))",
+            "visible": false
+          },
+          {
+            "expr": "list(evens(0))",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "yield"
+        ]
+      },
+      "minutes": 7,
+      "xp": 25
+    },
+    {
+      "title": "Decorators",
+      "concept": "A <b>decorator</b> is a function that takes a function and returns a new, upgraded one. Writing <code>@name</code> above a <code>def</code> is shorthand for <code>f = name(f)</code>. Inside, you usually define a <code>wrapper(*args, **kwargs)</code> that calls the original and adds behaviour.",
+      "why": "Web frameworks use decorators for routes, logins and caching without touching the original function's code.",
+      "example": "def shout(func):\n    def wrapper(*args, **kwargs):\n        return func(*args, **kwargs).upper()\n    return wrapper\n\n@shout\ndef greet(name):\n    return 'hi ' + name\n\nprint(greet('asha'))",
+      "example_note": "Prints HI ASHA because the decorator upper-cases the result.",
+      "prompt": "Write a decorator <code>double</code> that doubles whatever number the decorated function returns. Apply it with <code>@double</code> to the function <code>add(a, b)</code> already in the starter.",
+      "starter": "def double(func):\n    # build and return a wrapper\n    return func\n\n# put @double on the line above def add\ndef add(a, b):\n    return a + b\n",
+      "solution": "def double(func):\n    def wrapper(*args, **kwargs):\n        return func(*args, **kwargs) * 2\n    return wrapper\n\n@double\ndef add(a, b):\n    return a + b",
+      "hints": [
+        "The wrapper calls func(*args, **kwargs) and multiplies the result by 2.",
+        "double must return wrapper (not call it).",
+        "Add @double on the line directly above def add."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "add(2, 3)"
+          },
+          {
+            "expr": "add(0, 0)",
+            "visible": false
+          },
+          {
+            "expr": "add(-4, 1)",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "@double",
+          "wrapper"
+        ]
+      },
+      "minutes": 7,
+      "xp": 25
+    },
+    {
+      "title": "Closures",
+      "concept": "A <b>closure</b> is an inner function that remembers variables from the outer function, even after the outer function has finished. To change such a remembered variable (not just read it), declare it with <code>nonlocal</code>.",
+      "why": "Closures give you private state without classes: counters, configurable helpers and callbacks all use them.",
+      "example": "def make_adder(n):\n    def add(x):\n        return x + n\n    return add\n\nadd5 = make_adder(5)\nprint(add5(10))",
+      "example_note": "add5 still remembers n = 5 and prints 15.",
+      "prompt": "Write <code>make_counter(start)</code> that returns a function. Each call of the returned function adds 1 to the remembered number and returns it, so <code>make_counter(10)</code> gives <code>11, 12, 13...</code>. Use <code>nonlocal</code>.",
+      "starter": "def make_counter(start):\n    count = start\n    def counter():\n        # update count with nonlocal and return it\n        return None\n    return counter\n",
+      "solution": "def make_counter(start):\n    count = start\n    def counter():\n        nonlocal count\n        count += 1\n        return count\n    return counter\n",
+      "hints": [
+        "Inside counter, write nonlocal count first.",
+        "Then count += 1 and return count.",
+        "Each make_counter call has its own count, so counters do not interfere."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "[c() for c in [make_counter(10)] for _ in range(3)]"
+          },
+          {
+            "expr": "(lambda a, b: [a(), a(), b(), a()])(make_counter(0), make_counter(100))",
+            "visible": false
+          },
+          {
+            "expr": "make_counter(-1)()",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "nonlocal"
+        ]
+      },
+      "minutes": 7,
+      "xp": 25
+    },
+    {
+      "title": "Context Managers",
+      "concept": "A <b>context manager</b> is used with <code>with</code>: it runs setup when the block starts and cleanup when it ends, even if an error happens. A class becomes one by defining <code>__enter__</code> (setup) and <code>__exit__</code> (cleanup). The <code>contextlib</code> module offers a shortcut with <code>@contextmanager</code>.",
+      "why": "Files, database connections and locks all use <code>with</code> so they are always closed or released properly.",
+      "example": "class Door:\n    def __enter__(self):\n        print('open')\n        return self\n    def __exit__(self, exc_type, exc, tb):\n        print('close')\n        return False\n\nwith Door():\n    print('inside')",
+      "example_note": "Prints open, inside, close.",
+      "prompt": "Write a class <code>Banner</code> with <code>__enter__</code> printing <code>&lt;&lt;&lt;</code> and <code>__exit__</code> printing <code>&gt;&gt;&gt;</code>. Then read one line of input and print it inside <code>with Banner():</code>. Input <code>hi</code> prints three lines: <code>&lt;&lt;&lt;</code>, <code>hi</code>, <code>&gt;&gt;&gt;</code>.",
+      "starter": "class Banner:\n    # add __enter__ and __exit__\n    pass\n\nword = input()\n# print word inside a with block\n",
+      "solution": "class Banner:\n    def __enter__(self):\n        print('<<<')\n        return self\n\n    def __exit__(self, exc_type, exc, tb):\n        print('>>>')\n        return False\n\nword = input()\nwith Banner():\n    print(word)",
+      "hints": [
+        "__exit__ takes self, exc_type, exc, tb.",
+        "Return self from __enter__ and False from __exit__.",
+        "with Banner(): then an indented print(word)."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "stdin": "hi\n"
+          },
+          {
+            "stdin": "Rubitech\n",
+            "visible": false
+          },
+          {
+            "stdin": "x y z\n",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "__enter__",
+          "__exit__",
+          "with Banner"
+        ]
+      },
+      "minutes": 7,
+      "xp": 25
+    },
+    {
+      "title": "Shallow Copy",
+      "concept": "<code>copy.copy(x)</code> makes a <b>shallow copy</b>: a new outer container, but the items inside are still the <i>same</i> objects. So adding to the copy leaves the original alone, yet changing a nested list shows up in both.",
+      "why": "Knowing what a copy really shares prevents bugs where changing one list mysteriously changes another.",
+      "example": "import copy\na = [[1], [2]]\nb = copy.copy(a)\nb.append([3])\nb[0].append(99)\nprint(a)\nprint(b)",
+      "example_note": "a shows the 99 (shared inner list) but not the new [3].",
+      "prompt": "Write <code>make_copy(lst)</code> that returns a <b>shallow</b> copy of <code>lst</code> using <code>copy.copy</code>.",
+      "starter": "import copy\n\ndef make_copy(lst):\n    # return a shallow copy\n    return lst\n",
+      "solution": "import copy\n\ndef make_copy(lst):\n    return copy.copy(lst)",
+      "hints": [
+        "The copy module has a function called copy.",
+        "copy.copy(lst) gives a new outer list.",
+        "return copy.copy(lst)"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "(lambda a: (lambda b: (b.append(9), b[0].append(5), a)[2])(make_copy(a)))([[1], [2]])"
+          },
+          {
+            "expr": "(lambda a: (lambda b: (b.append(9), a)[1])(make_copy(a)))([1, 2])",
+            "visible": false
+          },
+          {
+            "expr": "(lambda a: (lambda b: (b[0].append(7), a)[1])(make_copy(a)))([[], [3]])",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "copy.copy"
+        ]
+      },
+      "minutes": 7,
+      "xp": 25
+    },
+    {
+      "title": "Deep Copy",
+      "concept": "<code>copy.deepcopy(x)</code> makes a <b>deep copy</b>: it copies the container <i>and</i> everything nested inside, recursively. The result shares nothing with the original, so changes never leak between them. It is slower than a shallow copy, so use it when you really need full independence.",
+      "why": "Saving a game state, undo history or a safe copy of a configuration needs a full independent duplicate.",
+      "example": "import copy\na = [[1], [2]]\nb = copy.deepcopy(a)\nb[0].append(99)\nprint(a)\nprint(b)",
+      "example_note": "Now a is untouched: [[1], [2]].",
+      "prompt": "Write <code>clone(data)</code> that returns a <b>deep</b> copy of <code>data</code> using <code>copy.deepcopy</code>.",
+      "starter": "import copy\n\ndef clone(data):\n    # return a deep copy\n    return copy.copy(data)\n",
+      "solution": "import copy\n\ndef clone(data):\n    return copy.deepcopy(data)",
+      "hints": [
+        "There is a sibling of copy.copy that goes all the way down.",
+        "It is called deepcopy.",
+        "return copy.deepcopy(data)"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "(lambda a: (lambda b: (b[0].append(5), a)[1])(clone(a)))([[1], [2]])"
+          },
+          {
+            "expr": "(lambda a: (lambda b: (b['x'].append(1), a)[1])(clone(a)))({'x': [0], 'y': [[2]]})",
+            "visible": false
+          },
+          {
+            "expr": "(lambda a: (lambda b: (b[0][0].append(8), a)[1])(clone(a)))([[[1]]])",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "deepcopy"
+        ]
+      },
+      "minutes": 7,
+      "xp": 25
+    },
+    {
+      "title": "Memory Management",
+      "concept": "Variables are <b>references</b> (labels) pointing at objects. <code>a is b</code> asks if two labels point at the same object, while <code>id()</code> shows an object's identity. Python frees an object automatically once nothing refers to it (<b>reference counting</b>, plus a <b>garbage collector</b> for cycles). A <code>weakref</code> points at an object <i>without</i> keeping it alive.",
+      "why": "Caches and big programs use weak references so stored objects can still be freed when nobody else needs them.",
+      "example": "import weakref\n\nclass Box:\n    pass\n\nb = Box()\nr = weakref.ref(b)\nprint(r() is b)\ndel b\nprint(r())",
+      "example_note": "Prints True, then None because the Box was freed.",
+      "prompt": "In the starter, <code>Node</code> has a <code>name</code>. Write <code>weak_demo(name)</code>: create a <code>Node(name)</code>, make a <code>weakref.ref</code> to it, record the node's name through the reference, then <code>del</code> the node. Return a tuple <code>(recorded_name, ref() is None)</code>.",
+      "starter": "import weakref\n\nclass Node:\n    def __init__(self, name):\n        self.name = name\n\ndef weak_demo(name):\n    # create node, weakref, record name, delete node\n    return None\n",
+      "solution": "import weakref\n\nclass Node:\n    def __init__(self, name):\n        self.name = name\n\ndef weak_demo(name):\n    node = Node(name)\n    ref = weakref.ref(node)\n    seen = ref().name\n    del node\n    return (seen, ref() is None)",
+      "hints": [
+        "ref = weakref.ref(node) ; calling ref() gives the object (or None).",
+        "Save ref().name in a variable before deleting.",
+        "After del node, ref() is None, so return (seen, ref() is None)."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "weak_demo('a')"
+          },
+          {
+            "expr": "weak_demo('Asha')",
+            "visible": false
+          },
+          {
+            "expr": "weak_demo('')",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "weakref",
+          "del "
+        ]
+      },
+      "minutes": 7,
+      "xp": 25
+    },
+    {
+      "title": "GIL",
+      "concept": "CPython has a <b>Global Interpreter Lock (GIL)</b>: only one thread runs Python bytecode at a time. Threads therefore do not speed up heavy maths, but they are great for waiting on files or networks. The GIL does <i>not</i> make <code>count += 1</code> safe: that is several steps, so threads can interleave. Protect shared data with a <code>threading.Lock</code>.",
+      "why": "Understanding the GIL tells you when to pick threads (waiting work) and when to pick processes (number crunching).",
+      "example": "import threading\ntotal = 0\nlock = threading.Lock()\n\ndef work():\n    global total\n    for _ in range(1000):\n        with lock:\n            total += 1\n\nts = [threading.Thread(target=work) for _ in range(4)]\nfor t in ts: t.start()\nfor t in ts: t.join()\nprint(total)",
+      "example_note": "Prints 4000 every time because the lock guards the shared counter.",
+      "prompt": "Write <code>safe_count(threads, per_thread)</code>: start <code>threads</code> threads, each adding 1 to a shared counter <code>per_thread</code> times while holding a <code>Lock</code>. Wait for all with <code>join()</code> and return the total.",
+      "starter": "import threading\n\ndef safe_count(threads, per_thread):\n    # shared counter + Lock + threads\n    return 0\n",
+      "solution": "import threading\n\ndef safe_count(threads, per_thread):\n    total = [0]\n    lock = threading.Lock()\n\n    def work():\n        for _ in range(per_thread):\n            with lock:\n                total[0] += 1\n\n    ts = [threading.Thread(target=work) for _ in range(threads)]\n    for t in ts:\n        t.start()\n    for t in ts:\n        t.join()\n    return total[0]",
+      "hints": [
+        "Keep the counter in a list like [0] so the inner function can change it.",
+        "Use with lock: around the increment.",
+        "Start all threads first, then join them all, then return total[0]."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "safe_count(4, 100)"
+          },
+          {
+            "expr": "safe_count(1, 5)",
+            "visible": false
+          },
+          {
+            "expr": "safe_count(8, 250)",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "Lock",
+          "Thread",
+          "join"
+        ]
+      },
+      "minutes": 7,
+      "xp": 25
+    },
+    {
+      "title": "Multithreading",
+      "concept": "The <code>threading</code> module runs functions in several threads: <code>Thread(target=f, args=(x,))</code>, then <code>.start()</code> and <code>.join()</code> to wait. A common safe pattern is to give each thread its own slot in a list to write into, and use a <code>Lock</code> for anything shared such as a total.",
+      "why": "Downloading many web pages or reading many files at once is much faster with threads, since they spend their time waiting.",
+      "example": "import threading\nresults = [0] * 3\n\ndef work(i):\n    results[i] = i * 10\n\nts = [threading.Thread(target=work, args=(i,)) for i in range(3)]\nfor t in ts: t.start()\nfor t in ts: t.join()\nprint(results)",
+      "example_note": "Each thread fills its own slot, printing [0, 10, 20].",
+      "prompt": "Write <code>threaded_squares(nums)</code>: start one thread per number. Each thread stores its square in its own index of a result list and also adds it to a shared total under a <code>Lock</code>. Return <code>(squares_list, total)</code>.",
+      "starter": "import threading\n\ndef threaded_squares(nums):\n    # one Thread per number, a Lock for the total\n    return ([], 0)\n",
+      "solution": "import threading\n\ndef threaded_squares(nums):\n    squares = [0] * len(nums)\n    total = [0]\n    lock = threading.Lock()\n\n    def work(i, n):\n        squares[i] = n * n\n        with lock:\n            total[0] += n * n\n\n    ts = [threading.Thread(target=work, args=(i, n)) for i, n in enumerate(nums)]\n    for t in ts:\n        t.start()\n    for t in ts:\n        t.join()\n    return (squares, total[0])",
+      "hints": [
+        "Pre-build squares = [0] * len(nums) so each thread owns one index.",
+        "Pass the index and number with args=(i, n).",
+        "Start every thread, join every thread, then return (squares, total[0])."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "threaded_squares([1, 2, 3])"
+          },
+          {
+            "expr": "threaded_squares([])",
+            "visible": false
+          },
+          {
+            "expr": "threaded_squares([5, -2, 10, 0])",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "Thread",
+          "Lock",
+          "join"
+        ]
+      },
+      "minutes": 7,
+      "xp": 25
+    },
+    {
+      "title": "Multiprocessing",
+      "concept": "A <b>process</b> is a separate Python with its own memory and its own GIL, so several processes can crunch numbers truly in parallel. With <code>multiprocessing.Pool(4).map(func, chunks)</code> (or <code>Process</code>) you hand each worker a piece of the data. Before fanning out you must <b>split the work</b> into chunks. (Our practice sandbox cannot start processes, so you will write the splitting helper.)",
+      "why": "Image processing, simulations and data crunching use one process per CPU core to finish several times faster.",
+      "example": "data = [1, 2, 3, 4, 5, 6, 7]\nq, r = divmod(len(data), 3)\nprint(q, r)\n# 7 items over 3 workers: sizes 3, 2, 2",
+      "example_note": "divmod gives the base chunk size and how many chunks get one extra item.",
+      "prompt": "Write <code>split_chunks(items, n)</code> that returns a list of <code>n</code> lists in order, as equal as possible, with the <b>earlier</b> chunks getting the extra items. <code>split_chunks([1,2,3,4,5,6,7], 3)</code> is <code>[[1,2,3],[4,5],[6,7]]</code>. If there are fewer items than <code>n</code>, the last chunks are empty.",
+      "starter": "def split_chunks(items, n):\n    # hint: size, extra = divmod(len(items), n)\n    return [items]\n",
+      "solution": "def split_chunks(items, n):\n    size, extra = divmod(len(items), n)\n    chunks = []\n    start = 0\n    for i in range(n):\n        end = start + size + (1 if i < extra else 0)\n        chunks.append(items[start:end])\n        start = end\n    return chunks",
+      "hints": [
+        "size, extra = divmod(len(items), n): every chunk gets size, the first extra chunks get one more.",
+        "Keep a start index and slice items[start:end] for each chunk.",
+        "end = start + size + (1 if i < extra else 0)"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "split_chunks([1, 2, 3, 4, 5, 6, 7], 3)"
+          },
+          {
+            "expr": "split_chunks(list(range(10)), 3)",
+            "visible": false
+          },
+          {
+            "expr": "split_chunks([1, 2], 4)",
+            "visible": false
+          },
+          {
+            "expr": "split_chunks([], 2)",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "def split_chunks"
+        ]
+      },
+      "minutes": 7,
+      "xp": 25
+    },
+    {
+      "title": "Async Programming",
+      "concept": "<b>Async</b> code lets one thread juggle many waiting tasks. Define a coroutine with <code>async def</code>, pause for results with <code>await</code>, run many at once with <code>asyncio.gather(...)</code>, and start the whole thing from normal code with <code>asyncio.run(...)</code>. Results from <code>gather</code> come back in the order you gave them.",
+      "why": "Web servers and chat apps use async to serve thousands of users at once while waiting on networks and databases.",
+      "example": "import asyncio\n\nasync def square(x):\n    await asyncio.sleep(0)\n    return x * x\n\nasync def main():\n    return await asyncio.gather(square(2), square(3))\n\nprint(asyncio.run(main()))",
+      "example_note": "Prints [4, 9].",
+      "prompt": "Write <code>async def double(x)</code> that does <code>await asyncio.sleep(0)</code> and returns <code>x * 2</code>. Then write a normal function <code>run_all(nums)</code> that uses <code>asyncio.gather</code> inside an async helper and <code>asyncio.run</code> to return the list of doubled numbers.",
+      "starter": "import asyncio\n\n# write async def double(x)\n\ndef run_all(nums):\n    # an async main() using gather, started with asyncio.run\n    return []\n",
+      "solution": "import asyncio\n\nasync def double(x):\n    await asyncio.sleep(0)\n    return x * 2\n\ndef run_all(nums):\n    async def main():\n        return await asyncio.gather(*(double(n) for n in nums))\n    return asyncio.run(main())",
+      "hints": [
+        "gather(*coroutines) takes the coroutines as separate arguments.",
+        "Define async def main() inside run_all and await gather in it.",
+        "return asyncio.run(main())"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "run_all([1, 2, 3])"
+          },
+          {
+            "expr": "run_all([])",
+            "visible": false
+          },
+          {
+            "expr": "run_all([10, -5, 0, 7])",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "async def",
+          "await",
+          "gather",
+          "asyncio.run"
+        ]
+      },
+      "minutes": 7,
+      "xp": 25
+    },
+    {
+      "title": "Metaclasses",
+      "concept": "Classes are objects too, and a <b>metaclass</b> is the class that builds them (by default it is <code>type</code>). Subclass <code>type</code> and override <code>__new__(mcs, name, bases, attrs)</code> to change a class's attributes while it is being created, then use it with <code>class X(metaclass=Meta)</code>.",
+      "why": "Frameworks such as Django models and ORMs use metaclasses to inspect and rewrite your class definitions automatically.",
+      "example": "class Tag(type):\n    def __new__(mcs, name, bases, attrs):\n        attrs['kind'] = 'tagged'\n        return super().__new__(mcs, name, bases, attrs)\n\nclass Thing(metaclass=Tag):\n    pass\n\nprint(Thing.kind)",
+      "example_note": "The metaclass added kind to Thing; prints tagged.",
+      "prompt": "Write a metaclass <code>Shout</code> that renames every attribute whose name does not start with <code>__</code> to UPPERCASE. Then define <code>class Config(metaclass=Shout)</code> with <code>host = 'local'</code> and <code>port = 80</code>, so <code>Config.HOST</code> is <code>'local'</code>.",
+      "starter": "class Shout(type):\n    def __new__(mcs, name, bases, attrs):\n        # build a new attrs dict with uppercase names\n        return super().__new__(mcs, name, bases, attrs)\n\n# define class Config using the metaclass\n",
+      "solution": "class Shout(type):\n    def __new__(mcs, name, bases, attrs):\n        new = {(k if k.startswith('__') else k.upper()): v for k, v in attrs.items()}\n        return super().__new__(mcs, name, bases, new)\n\nclass Config(metaclass=Shout):\n    host = 'local'\n    port = 80",
+      "hints": [
+        "Loop over attrs.items() and make a new dict.",
+        "Keep keys starting with __ unchanged, uppercase the rest.",
+        "Pass the new dict to super().__new__(mcs, name, bases, new)."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "(Config.HOST, Config.PORT)"
+          },
+          {
+            "expr": "hasattr(Config, 'host')",
+            "visible": false
+          },
+          {
+            "expr": "sorted(k for k in vars(Config) if not k.startswith('__'))",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "metaclass=",
+          "type"
+        ]
+      },
+      "minutes": 7,
+      "xp": 25
+    },
+    {
+      "title": "Descriptors",
+      "concept": "A <b>descriptor</b> is an object stored on a class that controls how an attribute is read and written. It defines <code>__get__(self, obj, objtype)</code> and/or <code>__set__(self, obj, value)</code>, and optionally <code>__set_name__(self, owner, name)</code> to learn the attribute name. Properties are built from descriptors.",
+      "why": "Reusable validation (positive numbers, non-empty text) across many fields is done with one descriptor class.",
+      "example": "class Loud:\n    def __get__(self, obj, objtype=None):\n        return 'LOUD'\n\nclass A:\n    x = Loud()\n\nprint(A().x)",
+      "example_note": "Reading a.x calls Loud.__get__ and prints LOUD.",
+      "prompt": "Write a descriptor class <code>Clamp</code> with <code>__set_name__</code>, <code>__get__</code> and <code>__set__</code> that stores each instance's value (in <code>'_' + name</code>) but turns negative numbers into <code>0</code>. <code>Product</code> is already in the starter and uses it for <code>price</code>.",
+      "starter": "class Clamp:\n    # add __set_name__, __get__, __set__\n    pass\n\nclass Product:\n    price = Clamp()\n\n    def __init__(self, price):\n        self.price = price\n",
+      "solution": "class Clamp:\n    def __set_name__(self, owner, name):\n        self.name = '_' + name\n\n    def __get__(self, obj, objtype=None):\n        if obj is None:\n            return self\n        return getattr(obj, self.name, 0)\n\n    def __set__(self, obj, value):\n        setattr(obj, self.name, max(0, value))\n\nclass Product:\n    price = Clamp()\n\n    def __init__(self, price):\n        self.price = price\n",
+      "hints": [
+        "__set_name__ saves '_' + name on the descriptor.",
+        "__get__ returns getattr(obj, self.name, 0); __set__ uses setattr.",
+        "In __set__, store max(0, value)."
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "Product(10).price"
+          },
+          {
+            "expr": "Product(-3).price",
+            "visible": false
+          },
+          {
+            "expr": "(lambda p: (setattr(p, 'price', -5), p.price)[1])(Product(10))",
+            "visible": false
+          },
+          {
+            "expr": "(lambda a, b: (a.price, b.price))(Product(4), Product(9))",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "__get__",
+          "__set__"
+        ]
+      },
+      "minutes": 7,
+      "xp": 25
+    },
+    {
+      "title": "Type Hints",
+      "concept": "<b>Type hints</b> label what types a function expects and returns: <code>def area(w: float, h: float) -&gt; float:</code>. Python does not enforce them, but editors and tools like <code>mypy</code> use them to catch mistakes. They are stored in the function's <code>__annotations__</code>. Modern Python writes generics like <code>list[int]</code> and <code>dict[str, int]</code>.",
+      "why": "Large teams use type hints so code documents itself and bugs are found before the program ever runs.",
+      "example": "def area(w: float, h: float) -> float:\n    return w * h\n\nprint(area(2.0, 3.0))\nprint(area.__annotations__)",
+      "example_note": "Prints 6.0 and the dictionary of hints.",
+      "prompt": "Write <code>average(nums: list[float]) -&gt; float</code> that returns the mean of the list, or <code>0.0</code> for an empty list. Keep the type hints exactly as shown.",
+      "starter": "def average(nums):\n    # add the type hints and return the mean\n    return None\n",
+      "solution": "def average(nums: list[float]) -> float:\n    if not nums:\n        return 0.0\n    return sum(nums) / len(nums)",
+      "hints": [
+        "Write nums: list[float] for the parameter and -> float after the parentheses.",
+        "Check for an empty list first.",
+        "return sum(nums) / len(nums)"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "average([2.0, 4.0])"
+          },
+          {
+            "expr": "average.__annotations__",
+            "visible": false
+          },
+          {
+            "expr": "average([])",
+            "visible": false
+          },
+          {
+            "expr": "average([1.0, 2.0, 6.0])",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "list[float]",
+          "->"
+        ]
+      },
+      "minutes": 7,
+      "xp": 25
+    },
+    {
+      "title": "Dataclasses",
+      "concept": "<code>@dataclass</code> (from <code>dataclasses</code>) writes the boring parts of a class for you. List fields with type hints and it creates <code>__init__</code>, a readable <code>__repr__</code> and <code>==</code>. Fields can have defaults, and you can still add normal methods.",
+      "why": "Dataclasses are the tidy way to model records such as users, orders and settings in modern Python.",
+      "example": "from dataclasses import dataclass\n\n@dataclass\nclass Point:\n    x: int\n    y: int = 0\n\nprint(Point(3))\nprint(Point(1, 2) == Point(1, 2))",
+      "example_note": "Prints Point(x=3, y=0) and True, all without writing __init__.",
+      "prompt": "Create a dataclass <code>Item</code> with fields <code>name: str</code>, <code>price: float</code> and <code>qty: int = 1</code>, plus a method <code>total()</code> returning <code>price * qty</code>.",
+      "starter": "from dataclasses import dataclass\n\n# write the Item dataclass\n",
+      "solution": "from dataclasses import dataclass\n\n@dataclass\nclass Item:\n    name: str\n    price: float\n    qty: int = 1\n\n    def total(self):\n        return self.price * self.qty",
+      "hints": [
+        "Put @dataclass on the line above class Item.",
+        "Fields look like name: str, and the default is qty: int = 1.",
+        "def total(self): return self.price * self.qty"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "Item('pen', 2.5, 4).total()"
+          },
+          {
+            "expr": "Item('book', 10.0)",
+            "visible": false
+          },
+          {
+            "expr": "Item('a', 1.0) == Item('a', 1.0, 1)",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "@dataclass"
+        ]
+      },
+      "minutes": 7,
+      "xp": 25
+    },
+    {
+      "title": "Collections (Counter, deque, defaultdict)",
+      "concept": "The <code>collections</code> module has handy containers. <code>Counter</code> counts items, <code>deque</code> is a list that is fast to add or remove at both ends, and <code>defaultdict</code> creates a missing key's value automatically (for example <code>defaultdict(list)</code>). <code>Counter(...).most_common(n)</code> returns the top <code>n</code> as (item, count) pairs.",
+      "why": "Word counts, queues of tasks and grouping records by category are everyday jobs these containers make short.",
+      "example": "from collections import Counter, deque, defaultdict\nprint(Counter('banana').most_common(2))\nq = deque([1, 2, 3]); q.appendleft(0); print(list(q))\ng = defaultdict(list); g['a'].append(1); print(dict(g))",
+      "example_note": "Counts letters, adds to the front of a deque, and groups with defaultdict.",
+      "prompt": "Write <code>top_words(text, n)</code> that lowercases the text, splits it on spaces and returns the <code>n</code> most common words as a list of <code>(word, count)</code> pairs using <code>Counter</code>.",
+      "starter": "from collections import Counter\n\ndef top_words(text, n):\n    # count the lowercase words\n    return []\n",
+      "solution": "from collections import Counter\n\ndef top_words(text, n):\n    return Counter(text.lower().split()).most_common(n)",
+      "hints": [
+        "text.lower().split() gives the list of words.",
+        "Counter(words) counts them.",
+        "return Counter(text.lower().split()).most_common(n)"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "top_words('the cat and The dog and the bird', 2)"
+          },
+          {
+            "expr": "top_words('a b a', 1)",
+            "visible": false
+          },
+          {
+            "expr": "top_words('', 3)",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "Counter"
+        ]
+      },
+      "minutes": 7,
+      "xp": 25
+    },
+    {
+      "title": "Functional Programming",
+      "concept": "Functional style favours <b>pure functions</b>: the output depends only on the inputs, and nothing outside is changed (no <b>side effects</b>). It also favours <b>immutability</b>: instead of modifying data, build a new value. Tools such as <code>map</code>, <code>filter</code> and <code>tuple</code> help.",
+      "why": "Pure functions are easy to test, safe to run in parallel threads and simple to reason about.",
+      "example": "def with_tax(prices, rate):\n    return [round(p * (1 + rate), 2) for p in prices]\n\nprices = (100, 200)\nprint(with_tax(prices, 0.1))\nprint(prices)",
+      "example_note": "Returns new prices and leaves the original untouched.",
+      "prompt": "Write a <b>pure</b> function <code>add_item(cart, item)</code> that returns a <i>new</i> list with <code>item</code> added at the end, without changing <code>cart</code>. Do not use <code>append</code> or <code>extend</code>.",
+      "starter": "def add_item(cart, item):\n    # return a new list; do not modify cart\n    return cart\n",
+      "solution": "def add_item(cart, item):\n    return cart + [item]",
+      "hints": [
+        "Mutating methods like append change the original.",
+        "The + operator on lists builds a new list.",
+        "return cart + [item]"
+      ],
+      "tests": {
+        "cases": [
+          {
+            "expr": "(lambda c: (add_item(c, 'pen'), c))(['a'])"
+          },
+          {
+            "expr": "(lambda c: (add_item(c, 1), c))([])",
+            "visible": false
+          },
+          {
+            "expr": "(lambda c: (add_item(c, 'z'), c))(['x', 'y'])",
+            "visible": false
+          }
+        ],
+        "requires": [
+          "return"
+        ],
+        "forbid": [
+          "append",
+          "extend"
+        ]
+      },
+      "minutes": 7,
+      "xp": 25
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Rubitech Academy">
+  <!-- One-colour version: inherits colour from CSS (currentColor). Use for stamps, print and single-ink uses. -->
+  <g fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" transform="translate(-3 0)">
+    <path d="M17 47V17H53"/>
+    <path d="M30 17a7 7 0 0 1 0 14H17"/>
+    <path d="M47 20V47"/>
+    <path d="M26 32L35 47"/>
+  </g>
+</svg>

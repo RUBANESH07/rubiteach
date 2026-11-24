@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 230 56" role="img" aria-label="Rubitech Academy">
+  <!-- For dark plum backgrounds: badge becomes cream, letters plum, leg stays coral. -->
+  <g transform="translate(0 4) scale(.75)">
+    <rect width="64" height="64" rx="18" fill="#FFF1ED"/>
+    <g transform="translate(-3 0)" fill="none" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M17 47V17H53" stroke="#4A1942"/><path d="M30 17a7 7 0 0 1 0 14H17" stroke="#4A1942"/>
+      <path d="M47 20V47" stroke="#4A1942"/><path d="M26 32L35 47" stroke="#FF8066"/>
+    </g>
+  </g>
+  <text x="62" y="30" font-family="Inter, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="27" font-weight="800" letter-spacing="-0.6" fill="#FFF1ED">Rubitech</text>
+  <text x="63" y="46" font-family="Inter, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" letter-spacing="4.2" fill="#FF8066">ACADEMY</text>
+</svg>

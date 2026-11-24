@@ -1,0 +1,361 @@
+[
+  {
+    "id": 1,
+    "position": 1,
+    "module": "m1",
+    "title": "Your first SELECT",
+    "minutes": 5,
+    "xp": 10,
+    "concept": "A <b>database</b> stores information in <b>tables</b> – like spreadsheets with rows and named columns. <code>SELECT</code> asks the database to show you data, and <code>FROM</code> says which table to read. The star <code>*</code> means “every column”.",
+    "why": "Every data job starts by looking at the data. SELECT is the most used SQL command in the world.",
+    "example_sql": "SELECT * FROM employees;",
+    "example_note": "Returns every column and every row of the employees table.",
+    "prompt": "Show <b>all columns and all rows</b> from the <code>departments</code> table.",
+    "starter": "-- Write your query below\n",
+    "solution": "SELECT * FROM departments;",
+    "verify": null,
+    "ordered": false,
+    "hints": [
+      "Use SELECT * to pick every column.",
+      "The table name goes after FROM.",
+      "SELECT * FROM departments;"
+    ]
+  },
+  {
+    "id": 2,
+    "position": 2,
+    "module": "m1",
+    "title": "Choosing columns",
+    "minutes": 5,
+    "xp": 10,
+    "concept": "Instead of <code>*</code> you can list the exact columns you want, separated by commas. You can also rename a column in the output with <code>AS</code>.",
+    "why": "Real tables have dozens of columns. Selecting only what you need makes results readable and faster.",
+    "example_sql": "SELECT name, job_title AS role\nFROM employees;",
+    "example_note": "Two columns only; job_title is displayed as “role”.",
+    "prompt": "Show the <code>name</code> and <code>salary</code> of every employee.",
+    "starter": "SELECT \nFROM employees;",
+    "solution": "SELECT name, salary FROM employees;",
+    "verify": null,
+    "ordered": false,
+    "hints": [
+      "List the columns after SELECT, separated by a comma.",
+      "SELECT name, salary FROM employees;"
+    ]
+  },
+  {
+    "id": 3,
+    "position": 3,
+    "module": "m1",
+    "title": "Filtering with WHERE",
+    "minutes": 6,
+    "xp": 15,
+    "concept": "<code>WHERE</code> keeps only the rows that match a condition. Compare with <code>=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code> or <code>&lt;&gt;</code> (not equal). Text values go in single quotes.",
+    "why": "Nobody wants all the data – they want the customers in Spain or the orders over $500. WHERE is how you ask.",
+    "example_sql": "SELECT name, country\nFROM customers\nWHERE country = 'USA';",
+    "example_note": "Only customers whose country is exactly USA.",
+    "prompt": "Show the <code>name</code> and <code>salary</code> of employees who earn <b>more than 90000</b>.",
+    "starter": "SELECT name, salary\nFROM employees\nWHERE ",
+    "solution": "SELECT name, salary FROM employees WHERE salary > 90000;",
+    "verify": null,
+    "ordered": false,
+    "hints": [
+      "Use the > operator – no quotes around numbers.",
+      "WHERE salary > 90000"
+    ]
+  },
+  {
+    "id": 4,
+    "position": 4,
+    "module": "m1",
+    "title": "AND, OR, IN & LIKE",
+    "minutes": 7,
+    "xp": 15,
+    "concept": "Combine conditions with <code>AND</code> (both true) and <code>OR</code> (either true). <code>IN (…)</code> checks a list of values and <code>LIKE</code> matches text patterns, where <code>%</code> means “anything”.",
+    "why": "Real questions have several conditions: “Furniture <i>or</i> Stationery, <i>and</i> cheap”.",
+    "example_sql": "SELECT name FROM customers\nWHERE country IN ('USA','Spain')\n   OR name LIKE 'M%';",
+    "example_note": "Customers from USA or Spain, or whose name starts with M.",
+    "prompt": "Show <code>name</code>, <code>category</code> and <code>price</code> of products in the <b>Furniture or Stationery</b> categories that cost <b>less than 100</b>.",
+    "starter": "SELECT name, category, price\nFROM products\nWHERE ",
+    "solution": "SELECT name, category, price FROM products WHERE category IN ('Furniture','Stationery') AND price < 100;",
+    "verify": null,
+    "ordered": false,
+    "hints": [
+      "category IN ('Furniture', 'Stationery') handles the first condition.",
+      "Join it to price < 100 with AND."
+    ]
+  },
+  {
+    "id": 5,
+    "position": 5,
+    "module": "m2",
+    "title": "Sorting with ORDER BY",
+    "minutes": 5,
+    "xp": 15,
+    "concept": "<code>ORDER BY</code> sorts the result. The default is ascending (<code>ASC</code>); add <code>DESC</code> for largest-first. You can sort by several columns.",
+    "why": "Leaderboards, “newest first”, “cheapest first” – sorted output is everywhere.",
+    "example_sql": "SELECT name, price\nFROM products\nORDER BY price ASC;",
+    "example_note": "Cheapest product first.",
+    "prompt": "Show <code>name</code> and <code>salary</code> of all employees, <b>highest salary first</b>.",
+    "starter": "SELECT name, salary\nFROM employees\nORDER BY ",
+    "solution": "SELECT name, salary FROM employees ORDER BY salary DESC;",
+    "verify": null,
+    "ordered": true,
+    "hints": [
+      "ORDER BY salary …",
+      "Add DESC after the column for highest first."
+    ]
+  },
+  {
+    "id": 6,
+    "position": 6,
+    "module": "m2",
+    "title": "LIMIT & DISTINCT",
+    "minutes": 6,
+    "xp": 15,
+    "concept": "<code>LIMIT n</code> returns only the first <i>n</i> rows – combine it with ORDER BY for “top 3” style questions. <code>DISTINCT</code> removes duplicate rows from the output.",
+    "why": "“Top 10 products” and “which countries do we sell to?” are classic reporting questions.",
+    "example_sql": "SELECT DISTINCT status\nFROM orders;",
+    "example_note": "Each order status appears once.",
+    "prompt": "Show the <code>name</code> and <code>price</code> of the <b>3 most expensive</b> products, most expensive first.",
+    "starter": "SELECT name, price\nFROM products\n",
+    "solution": "SELECT name, price FROM products ORDER BY price DESC LIMIT 3;",
+    "verify": null,
+    "ordered": true,
+    "hints": [
+      "Sort by price descending first.",
+      "Then add LIMIT 3 at the very end."
+    ]
+  },
+  {
+    "id": 7,
+    "position": 7,
+    "module": "m3",
+    "title": "Aggregate functions",
+    "minutes": 6,
+    "xp": 20,
+    "concept": "Aggregate functions turn many rows into one value: <code>COUNT()</code>, <code>SUM()</code>, <code>AVG()</code>, <code>MIN()</code>, <code>MAX()</code>. <code>COUNT(*)</code> counts rows.",
+    "why": "Totals, averages and counts are the numbers on every business dashboard.",
+    "example_sql": "SELECT COUNT(*) AS products, MAX(price) AS priciest\nFROM products;",
+    "example_note": "One row: how many products, and the highest price.",
+    "prompt": "In one row, show the <b>number of employees</b> and their <b>average salary</b> (two columns).",
+    "starter": "SELECT \nFROM employees;",
+    "solution": "SELECT COUNT(*) AS total, AVG(salary) AS avg_salary FROM employees;",
+    "verify": null,
+    "ordered": false,
+    "hints": [
+      "COUNT(*) counts rows.",
+      "AVG(salary) gives the average.",
+      "SELECT COUNT(*), AVG(salary) FROM employees;"
+    ]
+  },
+  {
+    "id": 8,
+    "position": 8,
+    "module": "m3",
+    "title": "GROUP BY",
+    "minutes": 7,
+    "xp": 20,
+    "concept": "<code>GROUP BY</code> splits rows into groups and runs the aggregate on each group separately. Every non-aggregated column in SELECT must appear in GROUP BY.",
+    "why": "“Sales <i>per region</i>”, “orders <i>per customer</i>” – any “per” question is a GROUP BY.",
+    "example_sql": "SELECT status, COUNT(*) AS orders\nFROM orders\nGROUP BY status;",
+    "example_note": "One row per status with its order count.",
+    "prompt": "For each product <code>category</code>, show the category and the <b>number of products</b> in it.",
+    "starter": "SELECT category, \nFROM products\n",
+    "solution": "SELECT category, COUNT(*) AS products FROM products GROUP BY category;",
+    "verify": null,
+    "ordered": false,
+    "hints": [
+      "COUNT(*) gives the number per group.",
+      "Finish with GROUP BY category."
+    ]
+  },
+  {
+    "id": 9,
+    "position": 9,
+    "module": "m3",
+    "title": "HAVING",
+    "minutes": 6,
+    "xp": 20,
+    "concept": "<code>WHERE</code> filters rows <i>before</i> grouping. <code>HAVING</code> filters groups <i>after</i> aggregation – use it when the condition involves COUNT, SUM, AVG…",
+    "why": "Lets you ask “which customers placed more than 3 orders?”",
+    "example_sql": "SELECT customer_id, COUNT(*) AS n\nFROM orders\nGROUP BY customer_id\nHAVING COUNT(*) >= 3;",
+    "example_note": "Only customers with 3 or more orders.",
+    "prompt": "Show each <code>department_id</code> from employees together with its employee count, but only departments with <b>more than 2 employees</b>.",
+    "starter": "SELECT department_id, COUNT(*) AS headcount\nFROM employees\nGROUP BY department_id\n",
+    "solution": "SELECT department_id, COUNT(*) AS headcount FROM employees GROUP BY department_id HAVING COUNT(*) > 2;",
+    "verify": null,
+    "ordered": false,
+    "hints": [
+      "The condition is on COUNT(*), so WHERE will not work.",
+      "HAVING COUNT(*) > 2"
+    ]
+  },
+  {
+    "id": 10,
+    "position": 10,
+    "module": "m4",
+    "title": "INNER JOIN",
+    "minutes": 8,
+    "xp": 25,
+    "concept": "Data lives in separate tables linked by keys. <code>JOIN … ON</code> matches rows from two tables, for example <code>employees.department_id = departments.id</code>. Use table aliases (<code>e</code>, <code>d</code>) to keep queries short.",
+    "why": "Relational databases split data to avoid repetition. JOINs put it back together for answers.",
+    "example_sql": "SELECT e.name, d.name AS department\nFROM employees e\nJOIN departments d ON d.id = e.department_id;",
+    "example_note": "Each employee next to their department name.",
+    "prompt": "Show each employee's <code>name</code> together with their <b>department name</b> and department <code>location</code>.",
+    "starter": "SELECT e.name, \nFROM employees e\nJOIN ",
+    "solution": "SELECT e.name, d.name, d.location FROM employees e JOIN departments d ON d.id = e.department_id;",
+    "verify": null,
+    "ordered": false,
+    "hints": [
+      "JOIN departments d ON … links the two tables.",
+      "The link is d.id = e.department_id."
+    ]
+  },
+  {
+    "id": 11,
+    "position": 11,
+    "module": "m4",
+    "title": "LEFT JOIN",
+    "minutes": 8,
+    "xp": 25,
+    "concept": "<code>LEFT JOIN</code> keeps <b>every</b> row from the left table, even with no match – the missing side is <code>NULL</code>. Test for it with <code>IS NULL</code> (never <code>= NULL</code>).",
+    "why": "Finding what is <i>missing</i> – customers who never ordered – is a core analyst skill.",
+    "example_sql": "SELECT c.name, o.id AS order_id\nFROM customers c\nLEFT JOIN orders o ON o.customer_id = c.id;",
+    "example_note": "Customers with no orders show NULL under order_id.",
+    "prompt": "Show the <code>name</code> of customers who have <b>never placed an order</b>.",
+    "starter": "SELECT c.name\nFROM customers c\nLEFT JOIN orders o ON o.customer_id = c.id\nWHERE ",
+    "solution": "SELECT c.name FROM customers c LEFT JOIN orders o ON o.customer_id = c.id WHERE o.id IS NULL;",
+    "verify": null,
+    "ordered": false,
+    "hints": [
+      "A customer with no orders has NULL in every orders column.",
+      "WHERE o.id IS NULL"
+    ]
+  },
+  {
+    "id": 12,
+    "position": 12,
+    "module": "m4",
+    "title": "Subqueries",
+    "minutes": 8,
+    "xp": 25,
+    "concept": "A <b>subquery</b> is a query inside another query, wrapped in parentheses. It is often used in WHERE to compare against a calculated value.",
+    "why": "Lets you ask two-step questions in one statement: “who earns more than the average?”",
+    "example_sql": "SELECT name, price FROM products\nWHERE price > (SELECT AVG(price) FROM products);",
+    "example_note": "Products priced above the overall average.",
+    "prompt": "Show <code>name</code> and <code>salary</code> of employees who earn <b>more than the average salary</b>.",
+    "starter": "SELECT name, salary\nFROM employees\nWHERE salary > (",
+    "solution": "SELECT name, salary FROM employees WHERE salary > (SELECT AVG(salary) FROM employees);",
+    "verify": null,
+    "ordered": false,
+    "hints": [
+      "The inner query is just SELECT AVG(salary) FROM employees.",
+      "Close the parenthesis and end with ;"
+    ]
+  },
+  {
+    "id": 13,
+    "position": 13,
+    "module": "m5",
+    "title": "CASE expressions",
+    "minutes": 7,
+    "xp": 25,
+    "concept": "<code>CASE WHEN … THEN … ELSE … END</code> is SQL's if/else. It creates a new, labelled value for every row.",
+    "why": "Turns raw numbers into categories – “High / Medium / Low” – for reports.",
+    "example_sql": "SELECT name,\n  CASE WHEN price >= 300 THEN 'Premium' ELSE 'Standard' END AS tier\nFROM products;",
+    "example_note": "Adds a tier label to each product.",
+    "prompt": "Show employee <code>name</code> and a column <code>band</code>: <b>'High'</b> if salary ≥ 90000, <b>'Mid'</b> if salary ≥ 60000, otherwise <b>'Entry'</b>.",
+    "starter": "SELECT name,\n  CASE\n    WHEN \n  END AS band\nFROM employees;",
+    "solution": "SELECT name, CASE WHEN salary >= 90000 THEN 'High' WHEN salary >= 60000 THEN 'Mid' ELSE 'Entry' END AS band FROM employees;",
+    "verify": null,
+    "ordered": false,
+    "hints": [
+      "Check the highest threshold first – CASE stops at the first match.",
+      "WHEN salary >= 90000 THEN 'High' WHEN salary >= 60000 THEN 'Mid' ELSE 'Entry'"
+    ]
+  },
+  {
+    "id": 14,
+    "position": 14,
+    "module": "m5",
+    "title": "Common Table Expressions",
+    "minutes": 9,
+    "xp": 30,
+    "concept": "A <b>CTE</b> (<code>WITH name AS (…)</code>) gives a query a temporary name so later queries can reuse it. It breaks big problems into readable steps.",
+    "why": "Professional SQL is written in small named steps, not one giant nested query.",
+    "example_sql": "WITH big AS (\n  SELECT * FROM products WHERE price > 100\n)\nSELECT category, COUNT(*) FROM big GROUP BY category;",
+    "example_note": "Step 1 filters; step 2 counts.",
+    "prompt": "An order's total is <code>quantity × price</code>. Using a CTE called <code>order_totals</code> (columns <code>id</code> and <code>total</code>), show orders with a <b>total above 500</b>.",
+    "starter": "WITH order_totals AS (\n  SELECT o.id, o.quantity * p.price AS total\n  FROM orders o\n  JOIN products p ON p.id = o.product_id\n)\nSELECT ",
+    "solution": "WITH order_totals AS (SELECT o.id, o.quantity * p.price AS total FROM orders o JOIN products p ON p.id = o.product_id) SELECT id, total FROM order_totals WHERE total > 500;",
+    "verify": null,
+    "ordered": false,
+    "hints": [
+      "The CTE is already written – just query it like a table.",
+      "SELECT id, total FROM order_totals WHERE total > 500;"
+    ]
+  },
+  {
+    "id": 15,
+    "position": 15,
+    "module": "m5",
+    "title": "Window functions",
+    "minutes": 10,
+    "xp": 35,
+    "concept": "A window function calculates across related rows <i>without collapsing them</i>. <code>RANK() OVER (PARTITION BY … ORDER BY …)</code> numbers rows inside each group.",
+    "why": "Rankings, running totals and “top N per group” are impossible with plain GROUP BY.",
+    "example_sql": "SELECT name, category, price,\n  RANK() OVER (PARTITION BY category ORDER BY price DESC) AS rnk\nFROM products;",
+    "example_note": "Most expensive product in each category gets rank 1.",
+    "prompt": "Show <code>name</code>, <code>department_id</code>, <code>salary</code> and a column <code>dept_rank</code> ranking employees by salary (highest = 1) <b>within their department</b>.",
+    "starter": "SELECT name, department_id, salary,\n  RANK() OVER (\n    \n  ) AS dept_rank\nFROM employees;",
+    "solution": "SELECT name, department_id, salary, RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS dept_rank FROM employees;",
+    "verify": null,
+    "ordered": false,
+    "hints": [
+      "PARTITION BY restarts the ranking for each department.",
+      "PARTITION BY department_id ORDER BY salary DESC"
+    ]
+  },
+  {
+    "id": 16,
+    "position": 16,
+    "module": "m6",
+    "title": "INSERT",
+    "minutes": 6,
+    "xp": 25,
+    "concept": "<code>INSERT INTO table (columns) VALUES (values)</code> adds a new row. Always list the columns so the order is explicit. The primary key <code>id</code> is generated automatically if you leave it out.",
+    "why": "Applications constantly add new users, orders and records.",
+    "example_sql": "INSERT INTO customers (name, city, country)\nVALUES ('Sam Lee', 'Seoul', 'Korea');",
+    "example_note": "Adds one customer. Use Run to try it – Reset restores the data.",
+    "prompt": "Insert a new product: name <b>'Webcam'</b>, category <b>'Electronics'</b>, price <b>59</b>, stock <b>40</b>.",
+    "starter": "INSERT INTO products (name, category, price, stock)\nVALUES (",
+    "solution": "INSERT INTO products (name, category, price, stock) VALUES ('Webcam','Electronics',59,40);",
+    "verify": "SELECT name, category, price, stock FROM products WHERE name = 'Webcam';",
+    "ordered": false,
+    "hints": [
+      "Values must follow the same order as the column list.",
+      "VALUES ('Webcam', 'Electronics', 59, 40);"
+    ]
+  },
+  {
+    "id": 17,
+    "position": 17,
+    "module": "m6",
+    "title": "UPDATE & DELETE",
+    "minutes": 8,
+    "xp": 35,
+    "concept": "<code>UPDATE … SET … WHERE …</code> changes existing rows and <code>DELETE FROM … WHERE …</code> removes them. <b>Always</b> include WHERE – without it every row is affected!",
+    "why": "Forgetting WHERE is the most famous SQL mistake. Learn the safe habit now: write SELECT with the same WHERE first.",
+    "example_sql": "UPDATE products\nSET price = price * 1.10\nWHERE category = 'Stationery';",
+    "example_note": "Raises Stationery prices by 10%.",
+    "prompt": "Give every <b>Engineering</b> employee (<code>department_id = 1</code>) a <b>10% raise</b>, then <b>delete all cancelled orders</b>. Run both statements.",
+    "starter": "UPDATE employees\nSET salary = \nWHERE ;\n\nDELETE FROM orders\nWHERE ;",
+    "solution": "UPDATE employees SET salary = salary * 1.10 WHERE department_id = 1; DELETE FROM orders WHERE status = 'cancelled';",
+    "verify": "SELECT (SELECT SUM(salary) FROM employees) AS payroll, (SELECT COUNT(*) FROM orders) AS orders_left;",
+    "ordered": false,
+    "hints": [
+      "salary = salary * 1.10 raises by 10%.",
+      "DELETE FROM orders WHERE status = 'cancelled';"
+    ]
+  }
+]
